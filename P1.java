@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
+ * Takes in a file and removes: HTML, Punctuation and special characters
  * 
  */
 
@@ -16,16 +17,14 @@ public class P1 {
 	
 	private boolean startFlag = false;	
 	private ArrayList<String> fileText = new ArrayList<String>();
-	private ArrayList<Integer> freq = new ArrayList<Integer>();
-	private ArrayList<String> tempWord = new ArrayList<String>();	
-	
+	private ArrayList<Integer> occurList = new ArrayList<Integer>();	
 	
 	public ArrayList<String> readFile(String fileName) {
 		String word = null;
 		String wordPuncRemoved = null;
 		String htmlRemoved = null;
-		BinarySearch search = new BinarySearch();
-		int wordCount =0;
+		BinarySearch search = new BinarySearch();		
+		
 		
 				
 		try {
@@ -37,6 +36,7 @@ public class P1 {
 				String tempTwo = null;
 				word = read.next();
 				boolean flag = false;
+				
 				//System.out.println(word);
 				
 				//System.out.println(word+" =");
@@ -46,31 +46,48 @@ public class P1 {
 					htmlRemoved = removeHTML(word).replaceAll("\\s+","");
 					wordPuncRemoved = removePunctuation(htmlRemoved).toLowerCase();
 					
-					for(int i=0;i<wordPuncRemoved.length();i++) {
-						
-						
-						if(wordPuncRemoved.charAt(i) == ' ' && i >= 1) {
-							flag = true;
-							temp = wordPuncRemoved.substring(0, i);
-							tempTwo = wordPuncRemoved.substring(i+1,wordPuncRemoved.length() );
-							break;
+					
+						for(int i=0;i<wordPuncRemoved.length();i++) {
 							
+														
+							if(wordPuncRemoved.charAt(i) == ' ' && i >= 1) {
+								flag = true;								
+								temp = wordPuncRemoved.substring(0, i);
+								tempTwo = wordPuncRemoved.substring(i+1,wordPuncRemoved.length() );
+								
+								//System.out.println(temp+"...."+tempTwo);
+																
+								break;
+								
+							}
+							
+						}
+					
+					
+					if(flag) {
+						
+						temp = temp.replaceAll("\\s+","");
+						tempTwo = tempTwo.replaceAll("\\s+","");
+						
+						if(!temp.isEmpty())
+							fileText = search.searchList(fileText, temp);
+						if(!tempTwo.isEmpty())
+							fileText = search.searchList(fileText, tempTwo);
+						flag = false;
+					}else {
+						wordPuncRemoved = wordPuncRemoved.replaceAll("[\\s]*","");
+						if(wordPuncRemoved.isEmpty() == false) {
+							
+							//System.out.println(wordPuncRemoved);
+							fileText = search.searchList(fileText, wordPuncRemoved);
+						
 						}
 						
 					}
 					
-					if(flag) {
-						fileText = search.searchList(fileText, temp);
-						fileText = search.searchList(fileText, tempTwo);
-						flag = false;
-					}else 
 					
-					//System.out.println(wordPuncRemoved);
 					
-					if(wordPuncRemoved.isEmpty() == false) {
-						fileText = search.searchList(fileText, wordPuncRemoved);
 					
-					}
 					
 					//if(wordPuncRemoved.length() > 0) 
 					//	tempWord.add(wordPuncRemoved);				
@@ -101,36 +118,47 @@ public class P1 {
 								
 			}			
 			read.close();
-			//System.out.println("WORDS");
+			occurList = search.getOccurrList();
+			
+			System.out.println(occurList.size() );
+			System.out.println(fileText.size()+"\n");
+			
 			for(int i=0;i<fileText.size();i++) {
-				System.out.println(fileText.get(i));
+				System.out.print(fileText.get(i)+"\n");
+				
 			}
+			
+//			for(int i=0;i<occurList.size();i++) {
+//				System.out.print("Index: "+i+" "+occurList.get(i)+" = "+fileText.get(i)+"\n");				
+//			}
 			//System.out.println("");			
 			//System.out.println("NUMBER OF WORDS: "+fileText.size() );
 			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+		} catch (FileNotFoundException e) {			
 			System.err.println("Error: found in output!");
 		}
-		
-		
-		
-		
 		
 		return null;
 		
 	}
-	
+	/*
+	 * Removes special characters including Punctuation
+	 * 
+	 */
 	private String removePunctuation(String word) {		
-				
+			//removes all punctuation and special characters
+			// adds a space so we can deal with words such as pre-req
 		return word.replaceAll("[\\\\/$\\-\\!\\+\\=|(){},.;:!?\\%]+", " ");		
 		
 	}	
 	
-	
+	/*
+	 * 
+	 * Removes the HTML tags starting with < and ending with >
+	 */
 	private String removeHTML(String word) {
 		String result = "";
-		boolean removed = false;
+		
 		String temp = null;
 		
 		
@@ -138,16 +166,17 @@ public class P1 {
 		for(int i=0;i<word.length();i++) {
 			char character = word.charAt(i);
 			
-			
+			//if < is found we don't add that text 
 			if(word.charAt(i) == '<') {
 				startFlag = true;				
 			}
 				
 			
-			//Removes text with the start bracket < 
+			//if < is found we don't add that text 
 			if(startFlag == true) {				
-				removed = true;				
+								
 				//System.out.println(word.charAt(i)+" Removed");
+				//end bracket > found so we can continue to add now 
 				if(character == '>') {
 					startFlag = false;
 				}
@@ -163,43 +192,17 @@ public class P1 {
 			}				
 			
 		}	
-			temp = result.replaceAll("\\p{Z}","");
+			temp = result;
 			return temp;		
 		
-	}
-	
-	private void checkWords() {		
-		int occurance =1;		
+	}		
+/*
+ * Returns the the number of occurances each word has. 
+ * Each element matches up with the word in the textFile List 	
+ */	
+public ArrayList<Integer> getOccurrList() {
 		
-				
-			for(int i=0;i<tempWord.size();i++) {
-				occurance =0;
-				for(int m=0;m<tempWord.size();m++) 
-				{
-					
-					if(tempWord.get(i).equals(tempWord.get(m))) {
-							occurance++;
-					}
-				}
-				
-				if(ifExists(tempWord.get(i))) {
-						fileText.add(tempWord.get(i));
-						freq.add(occurance);
-				}
-						
-			}
-	}
-	
-	private boolean ifExists(String word) {
-		
-		for(int i=0;i<fileText.size();i++) {			
-			if(fileText.get(i).equals(word))
-				return false;
-		}
-			
-		
-		
-		return true;
+		return occurList;
 	}
 	
 	
