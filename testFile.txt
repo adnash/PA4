@@ -1,0 +1,15 @@
+pre-req
+This is! a test test test <test> Jeremy. Aldrich
+echo brovo mark. jake isn't !
+test 12<this is a test > yes. / \\ \ JEREMY ALDRICH jeremy aldrich ESTES
+<this is a test 
+test again > Tab	Tab
+four four four four
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+pre-req
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>Java replaceAll - How to replace all blank characters in a String | alvinalexander.com</title>
+ pre-req
+ pre-h
+ p-t 12:30 14:00

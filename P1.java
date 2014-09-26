@@ -31,8 +31,12 @@ public class P1 {
 		try {
 			Scanner read = new Scanner(new File(fileName));
 			
+			
 			while(read.hasNext() ) {
+				String temp = null;
+				String tempTwo = null;
 				word = read.next();
+				boolean flag = false;
 				//System.out.println(word);
 				
 				//System.out.println(word+" =");
@@ -40,7 +44,28 @@ public class P1 {
 				if(word.isEmpty() == false)
 				{
 					htmlRemoved = removeHTML(word).replaceAll("\\s+","");
-					wordPuncRemoved = removePunctuation(htmlRemoved).replaceAll("\\s+","").toLowerCase();
+					wordPuncRemoved = removePunctuation(htmlRemoved).toLowerCase();
+					
+					for(int i=0;i<wordPuncRemoved.length();i++) {
+						
+						
+						if(wordPuncRemoved.charAt(i) == ' ' && i >= 1) {
+							flag = true;
+							temp = wordPuncRemoved.substring(0, i);
+							tempTwo = wordPuncRemoved.substring(i+1,wordPuncRemoved.length() );
+							break;
+							
+						}
+						
+					}
+					
+					if(flag) {
+						fileText = search.searchList(fileText, temp);
+						fileText = search.searchList(fileText, tempTwo);
+						flag = false;
+					}else 
+					
+					//System.out.println(wordPuncRemoved);
 					
 					if(wordPuncRemoved.isEmpty() == false) {
 						fileText = search.searchList(fileText, wordPuncRemoved);
@@ -76,12 +101,12 @@ public class P1 {
 								
 			}			
 			read.close();
-			System.out.println("WORDS");
+			//System.out.println("WORDS");
 			for(int i=0;i<fileText.size();i++) {
 				System.out.println(fileText.get(i));
 			}
-			System.out.println("");			
-			System.out.println("NUMBER OF WORDS: "+fileText.size() );
+			//System.out.println("");			
+			//System.out.println("NUMBER OF WORDS: "+fileText.size() );
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -98,7 +123,7 @@ public class P1 {
 	
 	private String removePunctuation(String word) {		
 				
-		return word.replaceAll("[\\\\/$\\-\\!\\+\\=|(){},.;!?\\%]+", "");		
+		return word.replaceAll("[\\\\/$\\-\\!\\+\\=|(){},.;:!?\\%]+", " ");		
 		
 	}	
 	
