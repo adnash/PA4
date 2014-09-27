@@ -18,6 +18,14 @@ public class P1 {
 	private boolean startFlag = false;	
 	private ArrayList<String> fileText = new ArrayList<String>();
 	private ArrayList<Integer> occurList = new ArrayList<Integer>();	
+	private ArrayList<Term> terms = new ArrayList<Term>();
+	
+	
+	
+	public ArrayList<Term>getTermList() {
+		
+		return terms;
+	}
 	
 	public ArrayList<String> readFile(String fileName) {
 		String word = null;

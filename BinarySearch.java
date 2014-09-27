@@ -57,7 +57,7 @@ public ArrayList<String> searchList (ArrayList<String> list,String word) {
 		    	//checks if the search is list < search	 	    
 		 	    if(checkWord(list.get(middle),search) < 0) {
 		 	    	//if the location is at the end at there
-		 	    	if(list.size() == (middle+1)) {
+		 	    	if(list.size() == (middle+1)) {		 	    		
 		 	    		list.add(word);
 		 	    		occurrList.add(occur);
 		 	    		//System.out.println("1-2 Perfect Spot: End ");
