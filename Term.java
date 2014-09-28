@@ -105,7 +105,7 @@ public class Term {
 			 return -1;
 		 }
 	  
-	 public static void main(String[] args) {
+/*	 public static void main(String[] args) {
 		 
 		 Term t = new Term("Test");
 		 
@@ -118,7 +118,21 @@ public class Term {
 		 System.out.println(t);
 		 
 		 
-	 }
+	 }*/
+	 
+	 
+	 public static void main(String[] args){
+			if(args.length ==0) {
+				System.err.println("Error: No args found!");
+			}
+			
+			String fileName = args[0];
+			
+			WebPages wP = new WebPages();
+			
+			wP.readFirstFile(fileName);
+			
+		}
 	 
 	
 	 
