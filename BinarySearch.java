@@ -238,7 +238,7 @@ public ArrayList<Term> searchList (ArrayList<Term> termIndex,String word,String 
 		  // System.out.println(s.toString() );
 		String result =null;
 		for(int i=0; i<termIndex.size();i++) {
-			
+			 
 			if(i==0)
 				result ="\n Term: "+termIndex.get(i).getName()+" Occur Size: "+termIndex.get(i).getOccurrSize()+" Total Freq: "+termIndex.get(i).getTotalFrequency();
 			else
