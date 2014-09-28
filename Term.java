@@ -100,7 +100,7 @@ public class Term {
 			}			 
 			 return -1;
 		 }
-	 
+	  
 	 public static void main(String[] args) {
 		 
 		 Term t = new Term("Test");

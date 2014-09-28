@@ -54,7 +54,7 @@ public class Occurrence {
 	
 	/*
 	 * Increments termFrequency by 1
-	 */
+	 */ 
 	
 	 public void incFrequency() {
 			 

@@ -56,7 +56,7 @@ public class P1 {
 					wordPuncRemoved = removePunctuation(htmlRemoved).toLowerCase();
 					
 					
-						for(int i=0;i<wordPuncRemoved.length();i++) {
+						for(int i=0;i<wordPuncRemoved.length();i++) { 
 							
 														
 							if(wordPuncRemoved.charAt(i) == ' ' && i >= 1) {

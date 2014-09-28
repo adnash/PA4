@@ -15,7 +15,7 @@ public ArrayList<Term> searchList (ArrayList<Term> termIndex,String word,String 
 	    int middle = (first + last)/2;
 	    String search = word.toLowerCase();
 	    boolean flag = false;
-	    Term term = new Term(word);	   
+	    Term term = new Term(word);	    	
 	    int index = -1;
 	    
 	    //if first word it automatically adds it and also adds 1 to the corresponding element in occurrList
