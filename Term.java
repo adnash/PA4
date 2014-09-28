@@ -9,7 +9,7 @@ import java.util.LinkedList;
  * @author Jeremy Aldrich
  * 
  */
-
+	
 
 public class Term {
 	

@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 
-
+/*
+ * 
+ * 
+ * @author Jeremy Aldrich
+ */
+		
+		
 public class BinarySearch {			
 		
 	//private ArrayList<Integer> occurrList = new ArrayList<Integer>();

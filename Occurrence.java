@@ -6,7 +6,7 @@
  *  These objects will become associated with Term objects (described below). Its interface includes at least the following methods:
 	public Occurrence(String name) which stores the docName and initializes the termFrequency to 1.
 	 public void incFrequency() which increments termFrequency by 1.
- * 
+ *    
  * @author Jeremy Aldrich 
  * 
  */
