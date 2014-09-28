@@ -57,17 +57,16 @@ public class Occurrence {
 	 */
 	
 	 public void incFrequency() {
-		 int freq = getTermFrequency()+1;
-		 
-		 setTermFrequency(freq);
+			 
+		 setTermFrequency(getTermFrequency()+1);
 		 
 		 
 	 }
 	
 	
 	 public String toString() {
-		 String result = "Doc Name: "+getDocName()+"\n Term Frequency: "+getTermFrequency()+"\n";
-		 
+		 String result = "Doc: "+getDocName()+"\n Term Frequency: "+getTermFrequency()+"\n";
+		 //String result = "";
 		return result; 
 	 }
 	

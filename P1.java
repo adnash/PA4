@@ -16,9 +16,10 @@ import java.util.Scanner;
 public class P1 {
 	
 	private boolean startFlag = false;	
-	private ArrayList<String> fileText = new ArrayList<String>();
+	//private ArrayList<String> fileText = new ArrayList<String>();
 	private ArrayList<Integer> occurList = new ArrayList<Integer>();	
 	private ArrayList<Term> terms = new ArrayList<Term>();
+	private ArrayList<Term> termIndex = new ArrayList<Term>();
 	
 	
 	
@@ -27,7 +28,7 @@ public class P1 {
 		return terms;
 	}
 	
-	public ArrayList<String> readFile(String fileName) {
+	public ArrayList<String> readFile(String fileName,String docName) {
 		String word = null;
 		String wordPuncRemoved = null;
 		String htmlRemoved = null;
@@ -78,16 +79,16 @@ public class P1 {
 						tempTwo = tempTwo.replaceAll("\\s+","");
 						
 						if(!temp.isEmpty())
-							fileText = search.searchList(fileText, temp);
+							termIndex = search.searchList(termIndex, temp,docName);
 						if(!tempTwo.isEmpty())
-							fileText = search.searchList(fileText, tempTwo);
+							termIndex = search.searchList(termIndex, tempTwo,docName);
 						flag = false;
 					}else {
 						wordPuncRemoved = wordPuncRemoved.replaceAll("[\\s]*","");
 						if(wordPuncRemoved.isEmpty() == false) {
 							
 							//System.out.println(wordPuncRemoved);
-							fileText = search.searchList(fileText, wordPuncRemoved);
+							termIndex = search.searchList(termIndex, wordPuncRemoved,fileName);
 						
 						}
 						
@@ -126,15 +127,15 @@ public class P1 {
 								
 			}			
 			read.close();
-			occurList = search.getOccurrList();
+			//occurList = search.getOccurrList();
 			
-			System.out.println(occurList.size() );
-			System.out.println(fileText.size()+"\n");
+			//System.out.println(occurList.size() );
+			//System.out.println(termIndex.size()+"\n");
 			
-			for(int i=0;i<fileText.size();i++) {
-				System.out.print(fileText.get(i)+"\n");
-				
-			}
+//			for(int i=0;i<fileText.size();i++) {
+//				System.out.print(fileText.get(i)+"\n");
+//				
+//			}
 			
 //			for(int i=0;i<occurList.size();i++) {
 //				System.out.print("Index: "+i+" "+occurList.get(i)+" = "+fileText.get(i)+"\n");				
@@ -222,10 +223,11 @@ public ArrayList<Integer> getOccurrList() {
 		}
 		
 		String fileName = args[0];
+		String docName = "test";
 		
 		P1 p = new P1();
 		
-		p.readFile(fileName);
+		p.readFile(fileName,docName);
 		
 		
 		

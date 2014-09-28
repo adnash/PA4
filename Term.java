@@ -75,8 +75,13 @@ public class Term {
 	 }
 	 public String toString() {		 
 		
-		return name+" with: "+terms.toString(); 
+		return name+" with: "+terms.toString()+" of size: "+getTotalFrequency(); 
 		
+	 }
+	 
+	 public int getOccurrSize() {
+		 
+		 return terms.size();
 	 }
 	 
 	 /*
@@ -103,9 +108,11 @@ public class Term {
 		 t.incFrequency("Alan");
 		 t.incFrequency("Jeremy");
 		 t.incFrequency("Jeremy");
-		 t.incFrequency("Alan");
-		 t.incFrequency("Jer");
+		 t.incFrequency("Jeremy");
+		 //t.incFrequency("Alan");
+		 //t.incFrequency("Jer");
 		 System.out.println(t);
+		 
 		 
 	 }
 	 

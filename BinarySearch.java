@@ -3,21 +3,29 @@ import java.util.ArrayList;
 
 public class BinarySearch {			
 		
-	private ArrayList<Integer> occurrList = new ArrayList<Integer>();
+	//private ArrayList<Integer> occurrList = new ArrayList<Integer>();
+	
+	private ArrayList<Term> termIndex = new ArrayList<Term>();
 			
 	
-public ArrayList<String> searchList (ArrayList<String> list,String word) {
+public ArrayList<Term> searchList (ArrayList<Term> termIndex,String word,String docName) {
 		int occur = 1;
 		int first  = 0;
-	    int last   = list.size() - 1;
+	    int last  = termIndex.size() - 1;
 	    int middle = (first + last)/2;
 	    String search = word.toLowerCase();
 	    boolean flag = false;
+	    Term term = new Term(word);	   
+	    int index = -1;
 	    
 	    //if first word it automatically adds it and also adds 1 to the corresponding element in occurrList
-	    if(list.size() == 0) {
-	    	list.add(search);
-	    	occurrList.add(1);
+	    if(termIndex.size() == 0) {
+	    	termIndex.add(term);
+	    	termIndex.get(0).incFrequency(docName);
+	    	
+	    	System.out.println(termIndex.get(0).toString() );
+	    	
+	    	//occurrList.add(1);
 	    
 	    }else {
 	    	
@@ -29,14 +37,18 @@ public ArrayList<String> searchList (ArrayList<String> list,String word) {
 		    while( first <= last )
 		    {
 		    	//Input word (search) is greater than the current middle
-		      if ( checkWord(list.get(middle),search.toLowerCase()) <0) {	    	  
+		      if ( checkWord(termIndex.get(middle).getName(),search.toLowerCase()) <0) {	    	  
 		    	  first = middle + 1;	    	 
 		    	  
 		      }//Input word (search) is equal to the current middle 	         
-		      else if (checkWord(list.get(middle),search.toLowerCase()) == 0 ) 
+		      else if (checkWord(termIndex.get(middle).getName(),search.toLowerCase()) == 0 ) 
 		      {
-		    	int value = occurrList.get(middle)+1;
-		    	occurrList.set(middle, value);
+		    	//int value = occurrList.get(middle)+1;
+		    	//occurrList.set(middle, value);
+		    	  index = middle;
+		    	  termIndex.get(index).incFrequency(docName);
+		    	  System.out.println(termIndex.get(middle).toString() );
+		    	  
 		        flag = true;
 		        break;
 		      }//Input word (search) is less than the current middle
@@ -55,28 +67,41 @@ public ArrayList<String> searchList (ArrayList<String> list,String word) {
 		    	
 		    	
 		    	//checks if the search is list < search	 	    
-		 	    if(checkWord(list.get(middle),search) < 0) {
+		 	    if(checkWord(termIndex.get(middle).getName(),search) < 0) {
 		 	    	//if the location is at the end at there
-		 	    	if(list.size() == (middle+1)) {		 	    		
-		 	    		list.add(word);
-		 	    		occurrList.add(occur);
+		 	    	if(termIndex.size() == (middle+1)) {		 	    		
+		 	    		termIndex.add(term);
+		 	    		index = termIndex.size();		 	    		
+		 	    		termIndex.get(index).incFrequency(docName);
+		 	    		//System.out.println(termIndex.get(index).toString() );
+		 	    		
+		 	    		//occurrList.add(occur);
 		 	    		//System.out.println("1-2 Perfect Spot: End ");
 		 	    	}
 		 	    	//if its located in the middle then add to that location 
 		 	    	else {
-		 	    		list.add(middle+1,word);
-		 	    		occurrList.add(middle+1,occur);
+		 	    		termIndex.add(middle+1,term);
+		 	    		index = middle+1;
+		 	    		termIndex.get(index).incFrequency(docName);
+		 	    		//System.out.println(termIndex.get(index).toString() );
+		 	    		//occurrList.add(middle+1,occur);
 		 	    		//System.out.println("1 Perfect Spot: "+(middle+1));
 		 	    	}
 		 	    	//adds element to the start of the arraylist
 		 	    }else {
-		 	    	list.add(0,word);
-		 	    	occurrList.add(0,occur);
+		 	    	termIndex.add(0,term);
+		 	    	index = 0;
+		 	    	
+		 	    	termIndex.get(index).incFrequency(docName);
+		 	    	
+		 	    	//occurrList.add(0,occur);
 		 	    	//System.out.println("3 Perfect Spot: Start");
 		 	    	
 		 	    }
 		 	    	
 		 	   //System.out.println(list.size());
+		 	    
+		 	 
 		    }
 		   
 	    
@@ -87,8 +112,9 @@ public ArrayList<String> searchList (ArrayList<String> list,String word) {
 		
 		
 		
-		
-		return list;
+	 
+	    
+		return termIndex;
 		
 		
 	}
@@ -151,9 +177,16 @@ public ArrayList<String> searchList (ArrayList<String> list,String word) {
 			return first.length();		
 		
 	}
-	public ArrayList<Integer> getOccurrList() {
+//	public ArrayList<Integer> getOccurrList() {
+//		
+//		return occurrList;
+//	}
+	
+	public String toString() {
 		
-		return occurrList;
+		
+		return termIndex.toString();
+		
 	}
 	
 			
@@ -162,6 +195,16 @@ public ArrayList<String> searchList (ArrayList<String> list,String word) {
 		
 		ArrayList <String> wordList = new ArrayList <String>();
 		ArrayList <String> sortedList = new ArrayList <String>();
+		ArrayList <Term> termIndex = new ArrayList <Term>();
+		
+		
+		termIndex = s.searchList(termIndex, "jeremy","DocName");
+		termIndex = s.searchList(termIndex, "jeremy","Doc");
+		//termIndex = s.searchList(termIndex, "jeremy","Alan");
+		
+		   System.out.println(s.toString() );
+		
+		//System.out.println(s.toString());
 		
 		
 		//wordList.add("c");

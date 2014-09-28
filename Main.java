@@ -6,7 +6,7 @@ public class Main {
 		
 		P1 p = new P1();
 		
-		p.readFile(fileName);
+		p.readFile(fileName,fileName);
 		
 		
 		
