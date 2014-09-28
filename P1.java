@@ -28,7 +28,7 @@ public class P1 {
 		return terms;
 	}
 	
-	public ArrayList<String> readFile(String fileName,String docName) {
+	public ArrayList<Term> readFile(String fileName,String docName) {
 		String word = null;
 		String wordPuncRemoved = null;
 		String htmlRemoved = null;
