@@ -66,7 +66,16 @@ public class WebPages {
 	}
 
 	public ArrayList<String> whichPages(String word) {
-		return null;
+		ArrayList<String> temp = new ArrayList<String>();
+		int countName = 0;
+		while(countName<termsList.size()){
+			if(word.equals(termsList.get(countName).getName())){
+				for(int i = 0; i<(termsList.get(countName).getDocNames()).size(); i++){
+					temp.add(termsList.get(countName).getDocNames().get(i).getDocName());
+				}
+			}
+		}
+		return temp;
 	}
 
 

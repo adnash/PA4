@@ -73,6 +73,10 @@ public class Term {
 		 }
 		 
 	 }
+	 
+	 public LinkedList<Occurrence> getDocNames(){
+		 return terms;
+	 }
 	 public String toString() {		 
 		
 		return name+" with: "+terms.toString()+" of size: "+getTotalFrequency(); 
