@@ -1,0 +1,132 @@
+
+
+ 
+CS 200, Fall 2014: Programming Assignment 2
+More Java, More Complex Data Structures and Sorting
+
+ 
+Due Wednesday 10/1/14 by 3PM
+
+ 
+
+The purpose of this assignment is to significantly enlarge your program, to extend its capabilities and to practice working with sorting algorithms. We are working toward building a system that searches a set of web pages. At present, we are working only with html documents and are starting to build an index that will be used to support searches.
+ 
+Creating New Classes: Occurrence, Term and WebPages
+
+ 
+
+At this stage, the program will be enhanced to read in multiple files (called documents in information retrieval) and add their words (called terms in information retrieval) into a common index.  To answer search queries, we will need to know how many times each term appears in each document, as well as the total across all documents. To keep track of these values, we will define three classes as follows. We will describe methods that must be included in the class; in most cases, you are going to want to have other methods as well.
+
+ 
+
+The figure shows conceptually how the different classes are used in a data structure for the WebPages class.
+
+Occurrence will hold two elements: a docName which is a String and termFrequency which is an int. termFrequency is the number of times that a particular term appears in the document with docName. These objects will become associated with Term objects (described below). Its interface includes at least the following methods:
+
+·    public Occurrence(String name) which stores the docName and initializes the termFrequency to 1.
+
+·    public void incFrequency() which increments termFrequency by 1.
+
+ 
+
+Term will record the word in lowercase (name), the count of the number of documents in which the word appears (docFrequency), a total count of frequency in which the term appears in all documents (totalFrequency) and a Linked List (either your own or the built-in class in Java) of Occurrences (one for each document in which the term appears). Its interface includes at least the following methods:
+
+·  public Term(String name) which stores the word (name) and initializes the docFrequency to 0.
+
+·  public void incFrequency(String document) which increments totalFrequency and either a) creates a new Occurrence object if there is not one with document as its docName and increments docFrequency or b) increments the frequency of Occurrence with document as its docName.
+
+ 
+
+WebPages organizes the Term objects. Its primary data structure is termIndex: an ArrayList of Term objects, one for each unique term.  The termIndex is basically the ArrayList you built in assignment 1, but the Strings are replaced by Terms. As before, the structure should be ordered by name initially. Its interface includes at least the following methods:
+
+·       public WebPages() initializes a new index, an ArrayList of Term.
+
+·       public void addPage(String filename) reads in the page in filename, divides it into words as before and adds those words and their counts to the termIndex.
+
+·       public void printTerms() prints on a separate line each word in the order in which it is stored in the ArrayList. As in PA1, the words should be proceded by "WORDS"; unlike PA1, the list should not be followed by a count of words.
+
+·       public void pruneStopWords(int n) removes n terms from the index. In IR, overly common words (called stop words) are ignored in documents. This method will post-process the index, after all the documents have been added, to remove the n most common words from the index. To do so, the index must be sorted by frequency, then the n terms with the highest frequency are removed, and finally the index is re-sorted by the words. Note: this means that the index will be sorted twice each time this method is invoked.
+
+·       public String[] whichPages(String word) searches the term index for “word”. If it is not in there, it returns null. Otherwise it returns an array of the names of files in which the word was found.
+
+ 
+Sorting
+
+ 
+
+For the sorting required to remove common words, you must implement Mergesort. The textbook includes code for it (pp. 529-531). If you use that code, (or any code taken from another source for MergeSort),  you should comment your code to credit the authors. You will need to make several modifications to this code:
+
+1.     change it to use an ArrayList instead of an array. (Copying to an array and then running the basic code or the built-in sort is not permitted.) 
+
+2.     change the “less than”in the following code (taken verbatim from the text) to be “less than or equal to” to make the sort more predictable
+
+                     if (theArray[first1].compareTo(theArray[first2])<0) {
+
+                          tempArray[index] = theArray[first1];
+
+                          first1++;  }
+
+3.     in the code snippet above, you also need to increment a counter (set to 0 each time Mergesort is run) that counts how many times that if statement is true. This value will be printed at the end of sorting as a check that you have implemented Mergesort properly. (See output description for specifics)
+
+4.     think about how to sort on either totalFrequency or name because you will need to sort the termindex both ways.
+
+ 
+
+ 
+Input/Output
+
+ 
+
+The program will take a single argument  (see input example) which is a file containing the information needed. Its first line(s) will be the names of the files (see example1 and example2) to process with addPage (Note: you need not handle the case where the number does not match what is actually there). The file names will end when the flag *EOFs* is reached.   The arguments should be the names of the files to read as web pages. Next line is an int that indicates how many stop words should be pruned (the argument to the pruneStopWords method). Finally the last lines in the file are words on which you should run the whichPages method.
+
+ 
+
+The output will print the term arraylist twice: once after files are read in and once after the frequent terms are removed. In between the term arraylists, will be two lines of “Copies: “ followed by a number that is the count determined when Mergesort is run each time. At the end of the output will be the results of searching for the terms. For more explanation, see description of procedure in Main Method section or look at output example.
+
+ 
+Main Method
+
+ 
+
+The main method in the top level class, called PA2, is in charge of reading the input file and processing the directives in there. It should:
+
+·      Create the WebPages object
+
+·      Add the new pages
+
+·      Print out the words in the same format as PA1
+
+·      Remove n stop words as indicated by the input file
+
+·      Print out the words in the same format as PA1
+
+·      Run whichPages method on WebPages object for each of the words in the input file:
+
+o   If the word has been found, it should print “<word> in pages: <page1>, <page2>…” as shown in output example
+
+o   If the word is not found, it should print “<word> not found”
+
+ 
+Summary of Changes to Existing Program
+
+·      ArrayList changes to have Terms instead of Strings. Any methods that access or modify the ArrayList must be moved into WebPages and modified to handle the new data type.
+
+·      Parsing of files is now done in addPage method instead of Main.
+
+·      Input file is lots more complex.
+
+·      Main method triggers creation of data structure and printing of answers to whichPages queries.
+
+·      Addition of classes: Occurrence, Term and WebPages.
+
+ 
+Notes
+ 
+
+·      You may find it useful to create toString methods for each of your classes to aid in debugging.
+
+·      The tricky part of this assignment is needing to sort the termIndex ArrayList by both name and totalFrequency.
+
+·      Consider the merits of making classes comparable when you are creating your classes….
+
+ 

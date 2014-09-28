@@ -15,21 +15,22 @@ public class BinarySearch {
 			
 	
 public ArrayList<Term> searchList (ArrayList<Term> termIndex,String word,String docName) {
-		int occur = 1;
+		//int occur = 1;
 		int first  = 0;
 	    int last  = termIndex.size() - 1;
-	    int middle = (first + last)/2;
+	    int middle = (first + last)/2;	    
 	    String search = word.toLowerCase();
 	    boolean flag = false;
 	    Term term = new Term(word);	    	
-	    int index = -1;
+	    int index = -1;	    
+	   
 	    
 	    //if first word it automatically adds it and also adds 1 to the corresponding element in occurrList
 	    if(termIndex.size() == 0) {
 	    	termIndex.add(term);
 	    	termIndex.get(0).incFrequency(docName);
 	    	
-	    	System.out.println(termIndex.get(0).toString() );
+	    	//System.out.println(termIndex.get(0).toString() );
 	    	
 	    	//occurrList.add(1);
 	    
@@ -40,8 +41,11 @@ public ArrayList<Term> searchList (ArrayList<Term> termIndex,String word,String 
 		 // if list < arg 2 return -1
 		 // if list == arg 2 return 0
 		    //System.out.println(list);
+	    	
+	    	
 		    while( first <= last )
 		    {
+		    	//System.out.println(word+" vs "+termIndex.get(middle).getName() );
 		    	//Input word (search) is greater than the current middle
 		      if ( checkWord(termIndex.get(middle).getName(),search.toLowerCase()) <0) {	    	  
 		    	  first = middle + 1;	    	 
@@ -53,7 +57,7 @@ public ArrayList<Term> searchList (ArrayList<Term> termIndex,String word,String 
 		    	//occurrList.set(middle, value);
 		    	  index = middle;
 		    	  termIndex.get(index).incFrequency(docName);
-		    	  System.out.println(termIndex.get(middle).toString() );
+		    	 // System.out.println(termIndex.get(middle).toString() );
 		    	  
 		        flag = true;
 		        break;
@@ -78,7 +82,7 @@ public ArrayList<Term> searchList (ArrayList<Term> termIndex,String word,String 
 		 	    	if(termIndex.size() == (middle+1)) {		 	    		
 		 	    		termIndex.add(term);
 		 	    		index = termIndex.size();		 	    		
-		 	    		termIndex.get(index).incFrequency(docName);
+		 	    		termIndex.get(index-1).incFrequency(docName);
 		 	    		//System.out.println(termIndex.get(index).toString() );
 		 	    		
 		 	    		//occurrList.add(occur);
@@ -104,6 +108,12 @@ public ArrayList<Term> searchList (ArrayList<Term> termIndex,String word,String 
 		 	    	//System.out.println("3 Perfect Spot: Start");
 		 	    	
 		 	    }
+		 	    
+//		 	    
+//		 	    for(int i=0;i<termIndex.size();i++) {
+//		 	    	
+//		 	    	System.out.println(termIndex.get(i).getName() );
+//		 	    }
 		 	    	
 		 	   //System.out.println(list.size());
 		 	    
@@ -190,8 +200,20 @@ public ArrayList<Term> searchList (ArrayList<Term> termIndex,String word,String 
 	
 	public String toString() {
 		
+		String result = null;
 		
-		return termIndex.toString();
+		for(int i=0; i<termIndex.size();i++) {
+			
+			if(i==0)
+				result ="\n Term: "+termIndex.get(i).getName()+" Occur Size: "+termIndex.get(i).getOccurrSize()+" Total Freq: "+termIndex.get(i).getTotalFrequency();
+			else
+				result +="\n Term: "+termIndex.get(i).getName()+" Occur Size: "+termIndex.get(i).getOccurrSize()+" Total Freq: "+termIndex.get(i).getTotalFrequency();
+			
+			
+		}
+			
+		
+		return result;
 		
 	}
 	
@@ -199,18 +221,33 @@ public ArrayList<Term> searchList (ArrayList<Term> termIndex,String word,String 
 	public static void main(String[] args) {		
 		BinarySearch s = new BinarySearch();
 		
-		ArrayList <String> wordList = new ArrayList <String>();
-		ArrayList <String> sortedList = new ArrayList <String>();
+		//ArrayList <String> wordList = new ArrayList <String>();
+		//ArrayList <String> sortedList = new ArrayList <String>();
 		ArrayList <Term> termIndex = new ArrayList <Term>();
 		
 		
 		termIndex = s.searchList(termIndex, "jeremy","DocName");
 		termIndex = s.searchList(termIndex, "jeremy","Doc");
-		//termIndex = s.searchList(termIndex, "jeremy","Alan");
+		termIndex = s.searchList(termIndex, "jeremy","Doc");
+		termIndex = s.searchList(termIndex, "alan","Doc");
+		termIndex = s.searchList(termIndex, "jeremy","Alan");
+		termIndex = s.searchList(termIndex, "Nick","Google");
+		termIndex = s.searchList(termIndex, "jake","Google");
+		termIndex = s.searchList(termIndex, "jeremy","Doc");
 		
-		   System.out.println(s.toString() );
-		
-		//System.out.println(s.toString());
+		  // System.out.println(s.toString() );
+		String result =null;
+		for(int i=0; i<termIndex.size();i++) {
+			
+			if(i==0)
+				result ="\n Term: "+termIndex.get(i).getName()+" Occur Size: "+termIndex.get(i).getOccurrSize()+" Total Freq: "+termIndex.get(i).getTotalFrequency();
+			else
+				result +="\n Term: "+termIndex.get(i).getName()+" Occur Size: "+termIndex.get(i).getOccurrSize()+" Total Freq: "+termIndex.get(i).getTotalFrequency();
+			
+			
+		}
+
+System.out.println(result);
 		
 		
 		//wordList.add("c");
