@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 
 public class WebPages {
-	public static ArrayList<Term> termsList;
+	private ArrayList<Term> termsList;
 
 	public WebPages() {
 		termsList = new ArrayList<Term>();
@@ -13,7 +13,7 @@ public class WebPages {
 	}
 
 	public void addPage(String fileName) {
-		P1 p = new P1();		
+		P1 p = new P1();	
 
 		termsList = p.readFile(fileName, fileName);
 
@@ -38,7 +38,7 @@ public class WebPages {
 		}
 	}
 
-	public static ArrayList<Term> mergeSort(ArrayList<Term> list) {
+	public ArrayList<Term> mergeSort(ArrayList<Term> list) {
 		if (list.size() > 1) {
 			ArrayList<Term> leftList = new ArrayList<Term>(list.subList(0, list.size()/2));
 			ArrayList<Term> rightList = new ArrayList<Term>(list.subList(list.size()/2 + 1, list.size()));
@@ -49,7 +49,7 @@ public class WebPages {
 		return list;
 	}
 
-	public static ArrayList<Term> merge(ArrayList<Term> a, ArrayList<Term> l, ArrayList<Term> r) {
+	public ArrayList<Term> merge(ArrayList<Term> a, ArrayList<Term> l, ArrayList<Term> r) {
 		int i =0, j = 0;
 		while(l != null && r != null){
 			if(l.get(i).getTotalFrequency() > r.get(j).getTotalFrequency()){
@@ -82,32 +82,70 @@ public class WebPages {
 	}
 	
 	public void readFirstFile(String fileName){
-		P1 p = new P1();
-		String word = null;		
-		ArrayList<String> temp = new ArrayList<String>();
+		ArrayList<String> searchWords = new ArrayList<String>();
+		boolean pruneTriger = false;
+		String word = null;	
+		boolean eofsFlag = false;
+		int stopWordNum = 0;
+		
+		ArrayList<String> termLocation = new ArrayList<String>();
 		try {
 			Scanner read = new Scanner(new File(fileName));
-			word = read.next();
-			while(!word.equals("*EOFs*")) {
-				p.readFile(word, word);
+			
+			while(read.hasNext()) {
 				word = read.next();
 				
-			}
-			while(read.hasNext()){
-				if(read.hasNextInt()){
-					int n = read.nextInt();
-					pruneStopWords(n);
-				}else{
-					word = read.next();
-					temp = whichPages(word);
-					if(temp == null){
-						System.out.println(word + " not found");
+				System.out.println(word);
+								
+				if(word.compareTo("*EOFs*")==0)
+					eofsFlag = true;
+				else {	
+					//Checks for the integer for prune stop word amount
+					if(isInteger(word) && pruneTriger == false) {							
+						stopWordNum = Integer.parseInt(word);
+						
+						//issues here 
+						pruneStopWords(stopWordNum);
+						
+						pruneTriger = true;
+					//if scanner is before *EOFS* t
+					}else if(eofsFlag == false) {
+						addPage(word);
+					//words to be searched added to an ArrayList to search later 	
 					}else{
-						System.out.println(word + " in pages : " + temp);
+						
+						//Issues here 
+						termLocation = whichPages(word);		
+						
+						if(termLocation == null)
+							System.out.println(word + " not found");
+						else
+							System.out.println(word + " in pages : " + termLocation);
+						
+						//searchWords.add(word);
 					}
-				}
+				}			
+				
 			}
+			
 			read.close();	
+			
+			
+//			for(int i=0;i<searchWords.size();i++){
+//				
+//				termLocation = whichPages(searchWords.get(i));		
+//				
+//				if(termLocation == null)
+//					System.out.println(searchWords.get(i) + " not found");
+//				else
+//					System.out.println(searchWords.get(i) + " in pages : " + termLocation);
+//				
+//			}
+			
+			
+			
+			
+			
 		} catch (FileNotFoundException e) {			
 			System.err.println("Error: found in output!");
 		}
@@ -115,6 +153,16 @@ public class WebPages {
 	}
 
 
+	public boolean isInteger(String s) {
+		  boolean result = false;
+		  try {
+		    Integer.parseInt(s);
+		    result = true;
+		  } catch (NumberFormatException nfe) {
+		    // no need to handle the exception
+		  }
+		  return result;
+		}
 
 
 

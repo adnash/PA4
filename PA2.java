@@ -1,9 +1,17 @@
 
+
 public class PA2 {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	
+	public static void main(String[] args){
+			
+		if(args.length ==0) {
+			System.err.println("Error: No args found!");
+		}
+		
+		String fileName = args[0];		
+		WebPages wP = new WebPages();		
+		wP.readFirstFile(fileName);
+		
 	}
-
+	
 }
