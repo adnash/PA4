@@ -15,7 +15,8 @@ public class WebPages {
 	public void addPage(String fileName) {
 		P1 p = new P1();	
 
-		termsList = p.readFile(fileName, fileName);
+		termsList.addAll(p.readFile(fileName, fileName));
+		System.out.println(termsList);
 
 	}
 
