@@ -22,7 +22,8 @@ public class WebPages {
 	public void pruneStopWords(int n) {
 		ArrayList<Term> temp = new ArrayList<Term>();
 		temp = termsList; 
-		mergeSort(temp);
+		System.out.println();
+		temp = mergeSort(temp);
 		int count = 0;
 		while(count<n){
 			String name = temp.get(0).getName();
@@ -32,6 +33,7 @@ public class WebPages {
 					termsList.remove(countName);
 					break;
 				}
+				countName++;
 			}
 			temp.remove(0);
 			count++;
@@ -41,34 +43,40 @@ public class WebPages {
 	public ArrayList<Term> mergeSort(ArrayList<Term> list) {
 		if (list.size() > 1) {
 			ArrayList<Term> leftList = new ArrayList<Term>(list.subList(0, list.size()/2));
-			ArrayList<Term> rightList = new ArrayList<Term>(list.subList(list.size()/2 + 1, list.size()));
-			mergeSort(leftList);
-			mergeSort(rightList);
-			list = merge(list,leftList,rightList);
+			ArrayList<Term> rightList = new ArrayList<Term>(list.subList(list.size()/2, list.size()));
+			leftList = mergeSort(leftList);
+			rightList = mergeSort(rightList);
+			list = merge(leftList,rightList);
 		}
 		return list;
 	}
 
-	public ArrayList<Term> merge(ArrayList<Term> a, ArrayList<Term> l, ArrayList<Term> r) {
+	public ArrayList<Term> merge(ArrayList<Term> l, ArrayList<Term> r) {
 		int i =0, j = 0;
-		while(l != null && r != null){
-			if(l.get(i).getTotalFrequency() > r.get(j).getTotalFrequency()){
-				a.add(l.get(i++));
+		ArrayList<Term> a = new ArrayList<Term>();
+		while(i<l.size() && j<r.size()){
+			if(l.get(i).getTotalFrequency() >= r.get(j).getTotalFrequency()){
+				a.add(l.get(i));
+				i++;
 			}else{
-				a.add(r.get(j++));
+				a.add(r.get(j));
+				j++;
 			}
 		}
-		while(l != null){
-			a.add(l.get(i++));
+		while(i<l.size()){
+			a.add(l.get(i));
+			i++;
 		}
-		while(r != null){
-			a.add(r.get(j++));
+		while(j<r.size()){
+			a.add(r.get(j));
+			j++;
 		}
 
 		return a;
 	}
 
 	public ArrayList<String> whichPages(String word) {
+		word = word.toLowerCase();
 		ArrayList<String> temp = new ArrayList<String>();
 		int countName = 0;
 		while(countName<termsList.size()){
@@ -76,7 +84,9 @@ public class WebPages {
 				for(int i = 0; i<(termsList.get(countName).getDocNames()).size(); i++){
 					temp.add(termsList.get(countName).getDocNames().get(i).getDocName());
 				}
+				break;
 			}
+			countName++;
 		}
 		return temp;
 	}
@@ -95,7 +105,7 @@ public class WebPages {
 			while(read.hasNext()) {
 				word = read.next();
 				
-				System.out.println(word);
+				//System.out.println(word);
 								
 				if(word.compareTo("*EOFs*")==0)
 					eofsFlag = true;
@@ -117,11 +127,15 @@ public class WebPages {
 						//Issues here 
 						termLocation = whichPages(word);		
 						
-						if(termLocation == null)
+						if(termLocation.isEmpty())
 							System.out.println(word + " not found");
-						else
-							System.out.println(word + " in pages : " + termLocation);
-						
+						else{
+							System.out.print(word + " in pages : ");
+							for(int i = 0; i<termLocation.size()-1; i++){
+								System.out.print(termLocation.get(i) + ", ");
+							}
+							System.out.println(termLocation.get(termLocation.size()-1));
+						}
 						//searchWords.add(word);
 					}
 				}			
