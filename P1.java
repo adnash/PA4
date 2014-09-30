@@ -17,9 +17,9 @@ public class P1 {
 	
 	private boolean startFlag = false;	
 	//private ArrayList<String> fileText = new ArrayList<String>();
-	private ArrayList<Integer> occurList = new ArrayList<Integer>();	
+	//private ArrayList<Integer> occurList = new ArrayList<Integer>();	
 	private ArrayList<Term> terms = new ArrayList<Term>();
-	private ArrayList<Term> termIndex = new ArrayList<Term>();
+	//private ArrayList<Term> termIndex = new ArrayList<Term>();
 	
 	
 	
@@ -28,7 +28,7 @@ public class P1 {
 		return terms;
 	}
 	
-	public ArrayList<Term> readFile(String fileName,String docName) {
+	public ArrayList<Term> readFile(String fileName,String docName,ArrayList <Term> termIndex) {
 		String word = null;
 		String wordPuncRemoved = null;
 		String htmlRemoved = null;
@@ -211,10 +211,10 @@ public class P1 {
  * Returns the the number of occurances each word has. 
  * Each element matches up with the word in the textFile List 	
  */	
-public ArrayList<Integer> getOccurrList() {
-		
-		return occurList;
-	}
+//public ArrayList<Integer> getOccurrList() {
+//		
+//		return occurList;
+//	}
 	
 	
 
@@ -229,7 +229,7 @@ public ArrayList<Integer> getOccurrList() {
 		
 		P1 p = new P1();
 		
-		p.readFile(fileName,docName);
+		//p.readFile(fileName,docName);
 		
 		
 		

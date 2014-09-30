@@ -13,10 +13,12 @@ public class WebPages {
 	}
 
 	public void addPage(String fileName) {
-		P1 p = new P1();	
+		P1 p = new P1();
+		
+		termsList = p.readFile(fileName, fileName,termsList);
 
-		termsList.addAll(p.readFile(fileName, fileName));
-		System.out.println(termsList);
+		//termsList.addAll(p.readFile(fileName, fileName));
+		//System.out.println(termsList);		
 
 	}
 
@@ -93,7 +95,7 @@ public class WebPages {
 	}
 	
 	public void readFirstFile(String fileName){
-		ArrayList<String> searchWords = new ArrayList<String>();
+		//ArrayList<String> searchWords = new ArrayList<String>();
 		boolean pruneTriger = false;
 		String word = null;	
 		boolean eofsFlag = false;
@@ -115,8 +117,15 @@ public class WebPages {
 					if(isInteger(word) && pruneTriger == false) {							
 						stopWordNum = Integer.parseInt(word);
 						
+						System.out.println("WORDS");
+						printTermsList();
+						
 						//issues here 
 						pruneStopWords(stopWordNum);
+						
+						System.out.println("WORDS");
+						printTermsList();
+						System.out.print("\n");
 						
 						pruneTriger = true;
 					//if scanner is before *EOFS* t
@@ -131,9 +140,9 @@ public class WebPages {
 						if(termLocation.isEmpty())
 							System.out.println(word + " not found");
 						else{
-							System.out.print(word + " in pages : ");
+							System.out.print(word + " in pages: ");
 							for(int i = 0; i<termLocation.size()-1; i++){
-								System.out.print(termLocation.get(i) + ", ");
+								System.out.print(termLocation.get(i) + ", ");								
 							}
 							System.out.println(termLocation.get(termLocation.size()-1));
 						}
@@ -178,6 +187,15 @@ public class WebPages {
 		  }
 		  return result;
 		}
+	
+	private void printTermsList() {
+		
+		for(int i=0;i<termsList.size();i++) {
+			System.out.println(termsList.get(i).getName());
+		}
+		
+		
+	}
 
 
 

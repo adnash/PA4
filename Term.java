@@ -58,6 +58,7 @@ public class Term {
 		 docName = docName.toLowerCase();
 		 //increments the total frequency;
 		 setTotalFrequency(getTotalFrequency()+1);
+		 
 		 // Searches if document of that name exists -1 if no match index of the document is if exists 
 		 int index = findIndex(docName);
 		 
@@ -65,6 +66,7 @@ public class Term {
 		 if(index == -1) {			 
 			 Occurrence occurrence = new  Occurrence(docName);				 
 			 terms.add(occurrence);	
+			 
 		//if document exists increase the frequency counter within the object 	 
 		 }else {
 			 
@@ -75,11 +77,24 @@ public class Term {
 	 }
 	 
 	 public LinkedList<Occurrence> getDocNames(){
+		 
 		 return terms;
 	 }
 	 public String toString() {		 
+		 String docs = null;
+		 
+		 //System.out.println(terms.size() );
+		// System.out.println(terms.get(0).getDocName() );
+		 //System.out.println(terms.get(1).getDocName() );
+		 for(int i=0;i<terms.size();i++) {
+			 
+			 if(i == 0)
+				 docs = terms.get(i).getDocName()+" ";
+			 else
+			 docs += terms.get(i).getDocName()+" ";
+		 }
 		
-		return name+" with: "+terms.toString()+" of size: "+getTotalFrequency(); 
+		return name+" in: "+docs+" of size: "+getTotalFrequency(); 
 		
 	 }
 	 
@@ -105,7 +120,7 @@ public class Term {
 			 return -1;
 		 }
 	  
-/*	 public static void main(String[] args) {
+	 public static void main(String[] args) {
 		 
 		 Term t = new Term("Test");
 		 
@@ -118,24 +133,6 @@ public class Term {
 		 System.out.println(t);
 		 
 		 
-	 }*/
-	 
-	 
-	 public static void main(String[] args){
-			if(args.length ==0) {
-				System.err.println("Error: No args found!");
-			}
-			
-			String fileName = args[0];
-			
-			WebPages wP = new WebPages();
-			
-			wP.readFirstFile(fileName);
-			
-		}
-	 
+	 }
 	
-	 
-	
-
 }
