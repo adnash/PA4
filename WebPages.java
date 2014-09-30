@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class WebPages {
 	private ArrayList<Term> termsList;
-	private int countMerge;
+	public int countMerge;
 
 	public WebPages() {
 		termsList = new ArrayList<Term>();
@@ -25,21 +25,26 @@ public class WebPages {
 
 	public void pruneStopWords(int n) {
 		ArrayList<Term> temp = new ArrayList<Term>();
+		MergeSortName msn = new MergeSortName();
+		MergeSortFreq msf = new MergeSortFreq();
 		temp = termsList; 
 		System.out.println();
-		countMerge = 0;
-		temp = mergeSortFreq(temp);
-		System.out.println("Copies: " + countMerge);
+		//temp = mergeSortFreq(temp);
+		msf.mergesort(temp);
+		for(int i = 0; i<temp.size(); i++){
+			System.out.println(temp.get(i).getName() + ", " + temp.get(i).getTotalFrequency());
+		}
+		System.out.println("Copies: " + msf.count);
 		int count = 0;
 		while(count<n){
 			temp.remove(0);
 			count++;
 		}
-		countMerge = 0;
-		termsList = mergeSortName(temp);
-		System.out.println("Copies: " + countMerge + "\n");
+		msn.mergesort(temp);
+		termsList = temp;
+		System.out.println("Copies: " + msn.count + "\n");
 	}
-
+	
 	public ArrayList<Term> mergeSortFreq(ArrayList<Term> list) {
 		if (list.size() > 1) {
 			ArrayList<Term> leftList = new ArrayList<Term>(list.subList(0, list.size()/2));
@@ -91,7 +96,7 @@ public class WebPages {
 		int i =0, j = 0;
 		ArrayList<Term> a = new ArrayList<Term>();
 		while(i<l.size() && j<r.size()){
-			if(l.get(i).getName().compareTo(r.get(j).getName())<=0){
+			if(l.get(i).getName().compareTo(r.get(j).getName())<0){
 				countMerge++;
 				a.add(l.get(i));
 				i++;
