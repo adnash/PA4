@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class WebPages {
 	private ArrayList<Term> termsList;
+	private int countMerge;
 
 	public WebPages() {
 		termsList = new ArrayList<Term>();
@@ -26,39 +27,72 @@ public class WebPages {
 		ArrayList<Term> temp = new ArrayList<Term>();
 		temp = termsList; 
 		System.out.println();
-		temp = mergeSort(temp);
+		countMerge = 0;
+		temp = mergeSortFreq(temp);
+		System.out.println("Copies: " + countMerge);
 		int count = 0;
 		while(count<n){
-			String name = temp.get(0).getName();
-			int countName = 0;
-			while(countName<termsList.size()){
-				if(name.equals(termsList.get(countName).getName())){
-					termsList.remove(countName);
-					break;
-				}
-				countName++;
-			}
 			temp.remove(0);
 			count++;
 		}
+		countMerge = 0;
+		termsList = mergeSortName(temp);
+		System.out.println("Copies: " + countMerge + "\n");
 	}
 
-	public ArrayList<Term> mergeSort(ArrayList<Term> list) {
+	public ArrayList<Term> mergeSortFreq(ArrayList<Term> list) {
 		if (list.size() > 1) {
 			ArrayList<Term> leftList = new ArrayList<Term>(list.subList(0, list.size()/2));
 			ArrayList<Term> rightList = new ArrayList<Term>(list.subList(list.size()/2, list.size()));
-			leftList = mergeSort(leftList);
-			rightList = mergeSort(rightList);
-			list = merge(leftList,rightList);
+			leftList = mergeSortFreq(leftList);
+			rightList = mergeSortFreq(rightList);
+			list = mergeFreq(leftList,rightList);
 		}
 		return list;
 	}
 
-	public ArrayList<Term> merge(ArrayList<Term> l, ArrayList<Term> r) {
+	public ArrayList<Term> mergeFreq(ArrayList<Term> l, ArrayList<Term> r) {
 		int i =0, j = 0;
 		ArrayList<Term> a = new ArrayList<Term>();
 		while(i<l.size() && j<r.size()){
 			if(l.get(i).getTotalFrequency() >= r.get(j).getTotalFrequency()){
+				countMerge++;
+				a.add(l.get(i));
+				i++;
+			}else{
+				a.add(r.get(j));
+				j++;
+			}
+		}
+		while(i<l.size()){
+			a.add(l.get(i));
+			i++;
+		}
+		while(j<r.size()){
+			a.add(r.get(j));
+			j++;
+		}
+
+		return a;
+	}
+	
+	public ArrayList<Term> mergeSortName(ArrayList<Term> list) {
+		if (list.size() > 1) {
+			ArrayList<Term> leftList = new ArrayList<Term>(list.subList(0, list.size()/2));
+			ArrayList<Term> rightList = new ArrayList<Term>(list.subList(list.size()/2, list.size()));
+			leftList = mergeSortName(leftList);
+			rightList = mergeSortName(rightList);
+			list = mergeName(leftList,rightList);
+		}
+		return list;
+	}
+
+	public ArrayList<Term> mergeName(ArrayList<Term> l, ArrayList<Term> r) {
+		int i =0, j = 0;
+		ArrayList<Term> a = new ArrayList<Term>();
+		while(i<l.size() && j<r.size()){
+			if(l.get(i).getName().compareTo(r.get(j).getName())<=0){
+				countMerge++;
 				a.add(l.get(i));
 				i++;
 			}else{
