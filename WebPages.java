@@ -35,10 +35,9 @@ public class WebPages {
 			System.out.println(temp.get(i).getName() + ", " + temp.get(i).getTotalFrequency());
 		}
 		System.out.println("Copies: " + msf.count);
-		int count = 0;
-		while(count<n){
-			temp.remove(0);
-			count++;
+		while(n > 0){
+			temp.remove(temp.size()-1);
+			n--;
 		}
 		msn.mergesort(temp);
 		termsList = temp;

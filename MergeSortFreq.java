@@ -19,7 +19,7 @@ public int count = 0;
 		int index = first1;
 		
 		while((first1<=last1) && (first2 <= last2)){
-			if((theArray.get(first1).getTotalFrequency())>(theArray.get(first2).getTotalFrequency())){
+			if(Integer.compare(theArray.get(first1).getTotalFrequency(),theArray.get(first2).getTotalFrequency()) <= 0 ) {
 				count++;
 				tempArray.add(index, theArray.get(first1));
 				first1++;
@@ -59,4 +59,3 @@ public int count = 0;
 	}
 
 }
-
