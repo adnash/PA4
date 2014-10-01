@@ -153,7 +153,7 @@ public class WebPages {
 					if(isInteger(word) && pruneTriger == false) {							
 						stopWordNum = Integer.parseInt(word);
 						
-						System.out.println("WORDS");
+						//System.out.println("WORDS");
 						printTerms();
 						
 						//issues here 
@@ -226,7 +226,7 @@ public class WebPages {
 		}
 	
 	public void printTerms()  {
-		//System.out.println("WORDS");
+		System.out.println("WORDS");
 		for(int i=0;i<termsList.size();i++) {
 			System.out.println(termsList.get(i).getName());
 		}
