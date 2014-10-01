@@ -159,7 +159,7 @@ public class P1 {
 	private String removePunctuation(String word) {		
 			//removes all punctuation and special characters
 			// adds a space so we can deal with words such as pre-req
-		return word.replaceAll("[&@#$%^*()·“”\\\"\\\\/$\\-\\!\\+\\=|(){},.;:!?\\%]+", " ");		
+		return word.replaceAll("[&@#$%^*()\\\"\\\\/$\\-\\!\\+\\=|(){},.;:!?\\%]+", " ");		
 		
 	}	
 	

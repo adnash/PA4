@@ -55,7 +55,7 @@ public class Term {
 	 * If document exists, increases the frequency within that object
 	 */	
 	 public void incFrequency(String docName) {
-		 docName = docName.toLowerCase();
+		 
 		 //increments the total frequency;
 		 setTotalFrequency(getTotalFrequency()+1);
 		 

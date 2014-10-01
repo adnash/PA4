@@ -31,9 +31,7 @@ public class WebPages {
 		System.out.println();
 		//temp = mergeSortFreq(temp);
 		msf.mergesort(temp);
-		for(int i = 0; i<temp.size(); i++){
-			System.out.println(temp.get(i).getName() + ", " + temp.get(i).getTotalFrequency());
-		}
+		
 		System.out.println("Copies: " + msf.count);
 		while(n > 0){
 			temp.remove(temp.size()-1);
@@ -156,13 +154,13 @@ public class WebPages {
 						stopWordNum = Integer.parseInt(word);
 						
 						System.out.println("WORDS");
-						printTermsList();
+						printTerms();
 						
 						//issues here 
 						pruneStopWords(stopWordNum);
 						
-						System.out.println("WORDS");
-						printTermsList();
+						
+						printTerms();
 						System.out.print("\n");
 						
 						pruneTriger = true;
@@ -175,12 +173,13 @@ public class WebPages {
 						//Issues here 
 						termLocation = whichPages(word);		
 						
+						
 						if(termLocation.isEmpty())
 							System.out.println(word + " not found");
 						else{
 							System.out.print(word + " in pages: ");
 							for(int i = 0; i<termLocation.size()-1; i++){
-								System.out.print(termLocation.get(i) + ", ");								
+								System.out.print(termLocation.get(i) +", ");								
 							}
 							System.out.println(termLocation.get(termLocation.size()-1));
 						}
@@ -226,8 +225,8 @@ public class WebPages {
 		  return result;
 		}
 	
-	private void printTermsList() {
-		
+	public void printTerms()  {
+		//System.out.println("WORDS");
 		for(int i=0;i<termsList.size();i++) {
 			System.out.println(termsList.get(i).getName());
 		}
