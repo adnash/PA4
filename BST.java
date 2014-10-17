@@ -25,12 +25,52 @@ public class BST {
 	//" At depth 1" (At is preceded by 2 spaces). If the word is not found, it should print the 
 	//deepest level that it checked.
 	public Term get(String word, Boolean printDepth){
-		return null;
-	}
-
-	//which destructively modifies the BST so that the Term indicated by word is no longer in the BST,
-	//but the BST is otherwise intact. Follow the convention/algorithm described in class and the text for how to delete.
-	public void delete(String word){
+		//found tells us when we found our word and stops searching
+		Boolean found = false;
+		//store our term to return
+		Term temp = null;
+		//term starts at depth 1
+		int depth = 1;
+		WebPages wp = new WebPages();
+		BinaryTree<Term> tempTree = wp.termsTree;
+		while(!found){
+			//if root and term are equal then set temp to term to return and stop searching
+			if(tempTree.getRootItem().getName().equals(word)){
+				temp =  tempTree.getRootItem();
+				found = true;
+			}
+			//See if less then root
+			else if(tempTree.getRootItem().getName().compareTo(word)<0){
+				//if so set temp tree to left sub tree and increase depth
+				if(tempTree.getRoot().getLeft()!=null){
+					depth++;
+					tempTree = tempTree.detachLeftSubtree();
+				}
+				//if left subtree empty means word doesn't exist
+				else{
+					temp = null;
+					found = true;
+				}
+			}
+			//if not equal to or less then it most be greater than, so to the right
+			else{
+				//if so set temp tree to right sub tree and increase depth
+				if(tempTree.getRoot().getRight()!=null){
+					depth++;
+					tempTree = tempTree.detachRightSubtree();
+				}
+				//if right subtree empty means word doesn't exist
+				else{
+					temp =  null;
+					found = true;
+				}
+			}
+		}
+		
+		if(printDepth){
+			System.out.println("  At depth " + depth );
+		}
+		return temp;
 
 	}
 
