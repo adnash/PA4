@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class WebPages {
 	private ArrayList<Term> termsList;
+	public BinaryTree<Term> termsTree;
 	public int countMerge;
 
 	public WebPages() {
