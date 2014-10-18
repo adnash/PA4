@@ -59,4 +59,9 @@ public class TreeNode<T> {
   // Sets the right child reference to right.
     rightChild  = right;
   }  // end setRight
+  
+  public String toString() {
+	  
+	  return item.toString();
+  }
 }  // end TreeNode

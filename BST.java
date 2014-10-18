@@ -1,10 +1,10 @@
 
 public class BST {
 	private int count;
-	private Term root;
+	private TreeNode<Term> root;
+	
 	//which initializes an instance variable called "root" as null and an instance variable called "count" as 0.
-	public BST(){
-		root = null;
+	public BST(){		
 		count = 0;
 	}
 
@@ -14,10 +14,78 @@ public class BST {
 	}
 
 	//which adds a new Term or increments frequencies if the term already exists in the BST.
-	public void add(String documentName, String word){
-		WebPages wp = new WebPages();
-		Term wordT = new Term(word);
-		TreeNode<Term> root = new TreeNode<Term>(wp.termsTree.getRootItem()); 
+	public void add(String docName, String word){
+		
+		
+		Term term = new Term(word);
+		term.incFrequency(docName);
+		TreeNode<Term> newNode = new TreeNode<Term>(term);
+		//TreeNode<Term> root = new TreeNode<Term>(wp.termsTree.getRootItem());
+		
+		
+		
+		//empty node so add the term
+		if(root == null) {
+			
+			root = newNode;		
+		}else {
+			
+			TreeNode<Term> currentNode = root;			
+			TreeNode<Term> parent;	
+			
+			while (true) {
+
+				// root is the top parent so we start
+				// there
+
+				parent = currentNode;
+
+				// Check if the new node should go on
+				// the left side of the parent node
+
+				if (word.compareTo(currentNode.getItem().getName())<0) {
+
+					// Switch currentNode to the left child
+
+					currentNode = currentNode.getLeft();
+
+					// If the left child has no children
+
+					if (currentNode == null) {
+
+						// then place the new node on the left of it
+
+						parent.setLeft(newNode);
+						return;
+
+					}
+
+				} else if (word.compareTo(currentNode.getItem().getName())>0){ // If we get here put the node on the right
+
+					currentNode = currentNode.getRight();
+
+					// If the right child has no children
+
+					if (currentNode == null) {
+
+						// then place the new node on the right of it
+
+						parent.setRight(newNode);
+						return; 
+
+					}
+				//if we get here the node exists already
+				}else {
+					
+					currentNode.getItem().incFrequency(docName);
+					
+					return;
+				}
+
+			}
+		}
+		
+		
 	}
 
 	//which returns the Term object for the word. If printDepth is true, then get should keep
@@ -73,5 +141,47 @@ public class BST {
 		return temp;
 
 	}
+	
+	public void inOrder(TreeNode<Term> node) {
+		
+		if(node != null){
+			inOrder(node.getLeft());
+			System.out.println(node);
+			inOrder(node.getRight());
+		}
+		
+	}
+	
+	
+	public static void main(String[] args) {
+
+		BST tree = new BST();
+		
+		tree.add("Google", "a");
+		tree.add("Google", "z");
+		tree.add("Google", "c");
+		tree.add("Google", "d");
+		tree.add("Google", "d");
+		
+		tree.inOrder(tree.root);
+		
+		
+		tree.get("d",true);
+
+		// Different ways to traverse binary trees
+
+		// theTree.inOrderTraverseTree(theTree.root);
+
+		// theTree.preorderTraverseTree(theTree.root);
+
+		// theTree.postOrderTraverseTree(theTree.root);
+
+		// Find the node with key 75
+
+		//System.out.println("\nNode with the key 75");
+
+		//System.out.println(theTree.findNode(75));
+
+}
 
 }
