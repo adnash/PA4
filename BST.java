@@ -93,53 +93,79 @@ public class BST {
 	//" At depth 1" (At is preceded by 2 spaces). If the word is not found, it should print the 
 	//deepest level that it checked.
 	public Term get(String word, Boolean printDepth){
-		//found tells us when we found our word and stops searching
-		Boolean found = false;
-		//store our term to return
-		Term temp = null;
-		//term starts at depth 1
+
 		int depth = 1;
-		WebPages wp = new WebPages();
-		BinaryTree<Term> tempTree = wp.termsTree;
-		while(!found){
-			//if root and term are equal then set temp to term to return and stop searching
-			if(tempTree.getRootItem().getName().equals(word)){
-				temp =  tempTree.getRootItem();
-				found = true;
-			}
-			//See if less then root
-			else if(tempTree.getRootItem().getName().compareTo(word)<0){
-				//if so set temp tree to left sub tree and increase depth
-				if(tempTree.getRoot().getLeft()!=null){
+		Term term = new Term(word);
+		TreeNode<Term> newNode = new TreeNode<Term>(term);
+		//TreeNode<Term> root = new TreeNode<Term>(wp.termsTree.getRootItem());
+		
+		
+		
+		//empty node so add the term
+		if(root == newNode) {
+			if(printDepth)
+				System.out.println("  At depth " + depth);
+			return term;
+		}else {
+			
+			TreeNode<Term> currentNode = root;			
+			TreeNode<Term> parent;	
+			
+			while (true) {
+
+				// root is the top parent so we start
+				// there
+
+				parent = currentNode;
+
+				// Check if the new node should go on
+				// the left side of the parent node
+
+				if (word.compareTo(currentNode.getItem().getName())<0) {
+
+					// Switch currentNode to the left child
+
+					currentNode = currentNode.getLeft();
 					depth++;
-					tempTree = tempTree.detachLeftSubtree();
-				}
-				//if left subtree empty means word doesn't exist
-				else{
-					temp = null;
-					found = true;
-				}
-			}
-			//if not equal to or less then it most be greater than, so to the right
-			else{
-				//if so set temp tree to right sub tree and increase depth
-				if(tempTree.getRoot().getRight()!=null){
+
+					// If the left child has no children
+
+					if (currentNode == newNode) {
+
+						// then place the new node on the left of it
+						if(printDepth)
+							System.out.println("  At depth " + depth);
+						return term;
+
+					}
+
+				} else if (word.compareTo(currentNode.getItem().getName())>0){ // If we get here put the node on the right
+
+					currentNode = currentNode.getRight();
 					depth++;
-					tempTree = tempTree.detachRightSubtree();
+
+					// If the right child has no children
+
+					if (currentNode == newNode) {
+
+						// then place the new node on the right of it
+						if(printDepth)
+							System.out.println("  At depth " + depth);
+						return term;
+
+					}
+				//if we get here the node exists already
+				}else {
+					
+					if(printDepth)
+						System.out.println("  At depth " + depth);
+					return null;
 				}
-				//if right subtree empty means word doesn't exist
-				else{
-					temp =  null;
-					found = true;
-				}
+
 			}
 		}
 		
-		if(printDepth){
-			System.out.println("  At depth " + depth );
-		}
-		return temp;
-
+		
 	}
 	
 	public void inOrder(TreeNode<Term> node) {
