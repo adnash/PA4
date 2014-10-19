@@ -1,11 +1,12 @@
 
 public class BST {
 	private int count;
-	private TreeNode<Term> root;
+	private static TreeNode<Term> root;
 	
 	//which initializes an instance variable called "root" as null and an instance variable called "count" as 0.
 	public BST(){		
 		count = 0;
+		//root = null;
 	}
 
 	//which returns the number of unique words in the document (i.e., count).
@@ -22,7 +23,14 @@ public class BST {
 		TreeNode<Term> newNode = new TreeNode<Term>(term);
 		//TreeNode<Term> root = new TreeNode<Term>(wp.termsTree.getRootItem());
 		
-		
+//		if(root != null) {
+//			BSTIterator<Term> iter = new BSTIterator<Term>(root);
+//			
+//			while(iter.hasNext()) {
+//				System.out.println(iter.next() );
+//			}
+//		}
+//			
 		
 		//empty node so add the term
 		if(root == null) {
@@ -56,6 +64,7 @@ public class BST {
 						// then place the new node on the left of it
 
 						parent.setLeft(newNode);
+						count++;
 						return;
 
 					}
@@ -71,6 +80,7 @@ public class BST {
 						// then place the new node on the right of it
 
 						parent.setRight(newNode);
+						count++;
 						return; 
 
 					}
@@ -81,6 +91,9 @@ public class BST {
 					
 					return;
 				}
+				
+				
+				
 
 			}
 		}
@@ -95,76 +108,41 @@ public class BST {
 	public Term get(String word, Boolean printDepth){
 
 		int depth = 1;
-		Term term = new Term(word);
-		TreeNode<Term> newNode = new TreeNode<Term>(term);
+		//Term term = new Term(word);
+		//TreeNode<Term> newNode = new TreeNode<Term>(term);
 		//TreeNode<Term> root = new TreeNode<Term>(wp.termsTree.getRootItem());
 		
 		
 		
-		//empty node so add the term
-		if(root == newNode) {
-			if(printDepth)
-				System.out.println("  At depth " + depth);
-			return term;
-		}else {
+
 			
 			TreeNode<Term> currentNode = root;			
-			TreeNode<Term> parent;	
+				
 			
-			while (true) {
-
-				// root is the top parent so we start
-				// there
-
-				parent = currentNode;
-
-				// Check if the new node should go on
-				// the left side of the parent node
-
-				if (word.compareTo(currentNode.getItem().getName())<0) {
-
-					// Switch currentNode to the left child
-
+			while(word.compareTo(currentNode.getItem().getName())!=0) {
+				
+				//check to the left since its less than the current node
+				if(word.compareTo(currentNode.getItem().getName())<0){
 					currentNode = currentNode.getLeft();
 					depth++;
-
-					// If the left child has no children
-
-					if (currentNode == newNode) {
-
-						// then place the new node on the left of it
-						if(printDepth)
-							System.out.println("  At depth " + depth);
-						return term;
-
-					}
-
-				} else if (word.compareTo(currentNode.getItem().getName())>0){ // If we get here put the node on the right
-
+					
+				//check to the right since its greater than the current node
+				}else if(word.compareTo(currentNode.getItem().getName())>0) {
 					currentNode = currentNode.getRight();
 					depth++;
-
-					// If the right child has no children
-
-					if (currentNode == newNode) {
-
-						// then place the new node on the right of it
-						if(printDepth)
-							System.out.println("  At depth " + depth);
-						return term;
-
-					}
-				//if we get here the node exists already
-				}else {
-					
+				}
+				
+				
+				if(currentNode == null) {
 					if(printDepth)
-						System.out.println("  At depth " + depth);
+						System.out.println("  At Depth "+depth);
 					return null;
 				}
-
 			}
-		}
-		
+			//found the value here
+			if(printDepth)
+				System.out.println(word+"  At Depth "+depth);
+			return root.getItem();
 		
 	}
 	
@@ -185,20 +163,24 @@ public class BST {
 		
 	}
 	
+	public TreeNode<Term> getNode() {
+		return this.root;
+	}
+	
 	public static void main(String[] args) {
 
 		BST tree = new BST();
 		
-		tree.add("Google", "Jeremy");
-		tree.add("Google", "Jer");
-		tree.add("Google", "Jerem");
-		tree.add("Google", "J");
-		tree.add("Google", "Je");
+		tree.add("Google", "panda");
+		tree.add("Google", "tiger");
+		tree.add("Google", "a");
+		tree.add("Google", "c");
+		tree.add("Google", "z");
 		
-		tree.inOrder(tree.root);
+		tree.inOrder(tree.getNode());
 		
 		
-		//tree.get("d",true);
+		//tree.get("zz",true);
 
 		// Different ways to traverse binary trees
 

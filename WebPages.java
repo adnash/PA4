@@ -6,8 +6,14 @@ import java.util.Scanner;
 
 public class WebPages {
 	private ArrayList<Term> termsList;
-	public BinaryTree<Term> termsTree;
+	private TreeNode<Term> termsTree;
+	private BST bst = new BST();
 	public int countMerge;
+	private boolean startFlag = false;
+	private TreeNode<Term> node;
+	
+	
+	
 
 	public WebPages() {
 		termsList = new ArrayList<Term>();
@@ -15,12 +21,21 @@ public class WebPages {
 	}
 
 	public void addPage(String fileName) {
-		P1 p = new P1();
 		
-		termsList = p.readFile(fileName, fileName,termsList);
+		
+		readFile(fileName, fileName);
 
 		//termsList.addAll(p.readFile(fileName, fileName));
 		//System.out.println(termsList);		
+		
+		BSTIterator<Term> iter = new BSTIterator<Term>(bst.getNode());
+		
+		while(iter.hasNext()) {
+			
+			System.out.println(iter.next().getName());
+		}
+		
+		
 
 	}
 
@@ -43,92 +58,28 @@ public class WebPages {
 		System.out.println("Copies: " + msn.count + "\n");
 	}
 	
-	public ArrayList<Term> mergeSortFreq(ArrayList<Term> list) {
-		if (list.size() > 1) {
-			ArrayList<Term> leftList = new ArrayList<Term>(list.subList(0, list.size()/2));
-			ArrayList<Term> rightList = new ArrayList<Term>(list.subList(list.size()/2, list.size()));
-			leftList = mergeSortFreq(leftList);
-			rightList = mergeSortFreq(rightList);
-			list = mergeFreq(leftList,rightList);
-		}
-		return list;
-	}
 
-	public ArrayList<Term> mergeFreq(ArrayList<Term> l, ArrayList<Term> r) {
-		int i =0, j = 0;
-		ArrayList<Term> a = new ArrayList<Term>();
-		while(i<l.size() && j<r.size()){
-			if(l.get(i).getTotalFrequency() >= r.get(j).getTotalFrequency()){
-				countMerge++;
-				a.add(l.get(i));
-				i++;
-			}else{
-				a.add(r.get(j));
-				j++;
-			}
-		}
-		while(i<l.size()){
-			a.add(l.get(i));
-			i++;
-		}
-		while(j<r.size()){
-			a.add(r.get(j));
-			j++;
-		}
-
-		return a;
-	}
-	
-	public ArrayList<Term> mergeSortName(ArrayList<Term> list) {
-		if (list.size() > 1) {
-			ArrayList<Term> leftList = new ArrayList<Term>(list.subList(0, list.size()/2));
-			ArrayList<Term> rightList = new ArrayList<Term>(list.subList(list.size()/2, list.size()));
-			leftList = mergeSortName(leftList);
-			rightList = mergeSortName(rightList);
-			list = mergeName(leftList,rightList);
-		}
-		return list;
-	}
-
-	public ArrayList<Term> mergeName(ArrayList<Term> l, ArrayList<Term> r) {
-		int i =0, j = 0;
-		ArrayList<Term> a = new ArrayList<Term>();
-		while(i<l.size() && j<r.size()){
-			if(l.get(i).getName().compareTo(r.get(j).getName())<0){
-				countMerge++;
-				a.add(l.get(i));
-				i++;
-			}else{
-				a.add(r.get(j));
-				j++;
-			}
-		}
-		while(i<l.size()){
-			a.add(l.get(i));
-			i++;
-		}
-		while(j<r.size()){
-			a.add(r.get(j));
-			j++;
-		}
-
-		return a;
-	}
-
-	public ArrayList<String> whichPages(String word) {
+	public Term whichPages(String word) {
 		word = word.toLowerCase();
-		ArrayList<String> temp = new ArrayList<String>();
-		int countName = 0;
-		while(countName<termsList.size()){
-			if(word.equals(termsList.get(countName).getName())){
-				for(int i = 0; i<(termsList.get(countName).getDocNames()).size(); i++){
-					temp.add(termsList.get(countName).getDocNames().get(i).getDocName());
-				}
-				break;
-			}
-			countName++;
-		}
-		return temp;
+		Term term;
+		term = bst.get(word, true);
+//		ArrayList<String> temp = new ArrayList<String>();
+//		int countName = 0;
+//		while(countName<termsList.size()){
+//			if(word.equals(termsList.get(countName).getName())){
+//				for(int i = 0; i<(termsList.get(countName).getDocNames()).size(); i++){
+//					temp.add(termsList.get(countName).getDocNames().get(i).getDocName());
+//				}
+//				break;
+//			}
+//			countName++;
+//		}
+		
+		System.out.println("Found Term: "+term.getName()+"in"+term.getDocNames());
+		
+		
+		
+		return term;
 	}
 	
 	public void readFirstFile(String fileName){
@@ -137,6 +88,7 @@ public class WebPages {
 		String word = null;	
 		boolean eofsFlag = false;
 		int stopWordNum = 0;
+		Term searchedTerm;
 		
 		ArrayList<String> termLocation = new ArrayList<String>();
 		try {
@@ -155,14 +107,14 @@ public class WebPages {
 						stopWordNum = Integer.parseInt(word);
 						
 						//System.out.println("WORDS");
-						printTerms();
+						//printTerms();
 						
 						//issues here 
-						pruneStopWords(stopWordNum);
+						//pruneStopWords(stopWordNum);
 						
 						
-						printTerms();
-						System.out.print("\n");
+						//printTerms();
+						//System.out.print("\n");
 						
 						pruneTriger = true;
 					//if scanner is before *EOFS* t
@@ -172,19 +124,19 @@ public class WebPages {
 					}else{
 						
 						//Issues here 
-						termLocation = whichPages(word);		
+						searchedTerm = whichPages(word);		
 						
 						
-						if(termLocation.isEmpty())
-							System.out.println(word + " not found");
-						else{
-							System.out.print(word + " in pages: ");
-							for(int i = 0; i<termLocation.size()-1; i++){
-								System.out.print(termLocation.get(i) +", ");								
-							}
-							System.out.println(termLocation.get(termLocation.size()-1));
-						}
-						//searchWords.add(word);
+//						if(searchedTerm == null)
+//							System.out.println(word + " not found");
+//						else{
+//							System.out.print(word + " in pages: ");
+//							for(int i = 0; i<termLocation.size()-1; i++){
+//								System.out.print(termLocation.get(i) +", ");								
+//							}
+//							//System.out.println(termLocation.get(termLocation.size()-1));
+//						}
+//						//searchWords.add(word);
 					}
 				}			
 				
@@ -234,6 +186,190 @@ public class WebPages {
 		
 		
 	}
+	public void readFile(String fileName,String docName) {
+		String word = null;
+		String wordPuncRemoved = null;
+		String htmlRemoved = null;
+		BinarySearch search = new BinarySearch();	
+		BST bst = new BST();
+		
+		
+				
+		try {
+			Scanner read = new Scanner(new File(fileName));
+			
+			
+			while(read.hasNext() ) {
+				String temp = null;
+				String tempTwo = null;
+				word = read.next();
+				boolean flag = false;
+				
+				//System.out.println(word);
+				
+				//System.out.println(word+" =");
+				
+				if(word.isEmpty() == false)
+				{
+					htmlRemoved = removeHTML(word).replaceAll("\\s+","");
+					wordPuncRemoved = removePunctuation(htmlRemoved).toLowerCase();
+					
+					
+						for(int i=0;i<wordPuncRemoved.length();i++) { 
+							
+														
+							if(wordPuncRemoved.charAt(i) == ' ' && i >= 1) {
+								flag = true;								
+								temp = wordPuncRemoved.substring(0, i);
+								tempTwo = wordPuncRemoved.substring(i+1,wordPuncRemoved.length() );
+								
+								//System.out.println(temp+"...."+tempTwo);
+																
+								
+								
+							}
+							
+						}
+					
+					
+					if(flag) {
+						
+						
+						
+						temp = temp.replaceAll("\\s+","");
+						tempTwo = tempTwo.replaceAll("\\s+","");
+						
+						if(!temp.isEmpty())
+							bst.add(docName,temp);
+							//termIndex = search.searchList(termIndex, temp,docName);
+						if(!tempTwo.isEmpty())
+							bst.add(docName,tempTwo);
+							//termIndex = search.searchList(termIndex, tempTwo,docName);
+						flag = false;
+					}else {
+						wordPuncRemoved = wordPuncRemoved.replaceAll("[\\s]*","");
+						if(wordPuncRemoved.isEmpty() == false) {
+							bst.add(docName,wordPuncRemoved);
+							//System.out.println(wordPuncRemoved);
+							//termIndex = search.searchList(termIndex, wordPuncRemoved,fileName);
+						
+						}
+						
+					}
+					
+					
+					
+					
+					
+					//if(wordPuncRemoved.length() > 0) 
+					//	tempWord.add(wordPuncRemoved);				
+					//wordCount++;										
+				}
+				
+				//text = removeWhiteSpace(wordPuncRemoved);				
+				//System.out.println(wordPuncRemoved);
+				
+//				if(!wordPuncRemoved.isEmpty()) {
+//					fileText.add(wordPuncRemoved);
+//					//System.out.println(wordPuncRemoved);
+//				}
+					
+	
+				//System.out.println(fileText);				
+				
+				//System.out.println(removeWhiteSpace("Test"));
+				//System.out.println(removeWhiteSpace("12    "));
+				//System.out.println(removeWhiteSpace("Test"));
+				//System.out.println(text);
+				//check for punctuation
+				//check for html
+				//check if word already exists 
+				// if exists ++ else add to list
+				
+				
+								
+			}			
+			read.close();
+			//occurList = search.getOccurrList();
+			
+			//System.out.println(occurList.size() );
+			//System.out.println(termIndex.size()+"\n");
+			
+//			for(int i=0;i<fileText.size();i++) {
+//				System.out.print(fileText.get(i)+"\n");
+//				
+//			}
+			
+//			for(int i=0;i<occurList.size();i++) {
+//				System.out.print("Index: "+i+" "+occurList.get(i)+" = "+fileText.get(i)+"\n");				
+//			}
+			//System.out.println("");			
+			//System.out.println("NUMBER OF WORDS: "+fileText.size() );
+			
+		} catch (FileNotFoundException e) {			
+			System.err.println("Error: found in output!");
+		}
+		
+		this.termsTree = bst.getNode();
+		
+		
+	}
+	/*
+	 * Removes special characters including Punctuation
+	 * 
+	 */
+	private String removePunctuation(String word) {		
+			//removes all punctuation and special characters
+			// adds a space so we can deal with words such as pre-req
+		return word.replaceAll("[&@#$%^*()\\\"\\\\/$\\-\\!\\+\\=|(){},.;:!?\\%]+", " ");		
+		
+	}	
+	
+	/*
+	 * 
+	 * Removes the HTML tags starting with < and ending with >
+	 */
+	private String removeHTML(String word) {
+		String result = "";
+		
+		String temp = null;
+		
+		
+		
+		for(int i=0;i<word.length();i++) {
+			char character = word.charAt(i);
+			
+			//if < is found we don't add that text 
+			if(word.charAt(i) == '<') {
+				startFlag = true;				
+			}
+				
+			
+			//if < is found we don't add that text 
+			if(startFlag == true) {				
+								
+				//System.out.println(word.charAt(i)+" Removed");
+				//end bracket > found so we can continue to add now 
+				if(character == '>') {
+					startFlag = false;
+				}
+					
+			}else {
+				
+				if(i == 0) {				
+					result = Character.toString(character);
+				} else {
+					result += character;
+				}		
+				
+			}				
+			
+		}	
+			temp = result;
+			return temp;		 
+		
+	}		
+
 
 
 

@@ -15,24 +15,26 @@ import java.util.Scanner;
  */
 public class P1 {
 	
-	private boolean startFlag = false;	
+	private boolean startFlag = false;
+	TreeNode<Term> node;
 	//private ArrayList<String> fileText = new ArrayList<String>();
 	//private ArrayList<Integer> occurList = new ArrayList<Integer>();	
-	private ArrayList<Term> terms = new ArrayList<Term>();
+//	private ArrayList<Term> terms = new ArrayList<Term>();
 	//private ArrayList<Term> termIndex = new ArrayList<Term>();
 	
 	
 	
-	public ArrayList<Term>getTermList() {
-		
-		return terms;
-	}
-	
-	public ArrayList<Term> readFile(String fileName,String docName,ArrayList <Term> termIndex) {
+//	public ArrayList<Term>getTermList() {
+//		
+//		return terms;
+//	}
+//	
+	public TreeNode<Term> readFile(String fileName,String docName) {
 		String word = null;
 		String wordPuncRemoved = null;
 		String htmlRemoved = null;
-		BinarySearch search = new BinarySearch();		
+		BinarySearch search = new BinarySearch();	
+		BST bst = new BST();
 		
 		
 				
@@ -81,16 +83,18 @@ public class P1 {
 						tempTwo = tempTwo.replaceAll("\\s+","");
 						
 						if(!temp.isEmpty())
-							termIndex = search.searchList(termIndex, temp,docName);
+							bst.add(docName,temp);
+							//termIndex = search.searchList(termIndex, temp,docName);
 						if(!tempTwo.isEmpty())
-							termIndex = search.searchList(termIndex, tempTwo,docName);
+							bst.add(docName,tempTwo);
+							//termIndex = search.searchList(termIndex, tempTwo,docName);
 						flag = false;
 					}else {
 						wordPuncRemoved = wordPuncRemoved.replaceAll("[\\s]*","");
 						if(wordPuncRemoved.isEmpty() == false) {
-							
+							bst.add(docName,wordPuncRemoved);
 							//System.out.println(wordPuncRemoved);
-							termIndex = search.searchList(termIndex, wordPuncRemoved,fileName);
+							//termIndex = search.searchList(termIndex, wordPuncRemoved,fileName);
 						
 						}
 						
@@ -149,7 +153,8 @@ public class P1 {
 			System.err.println("Error: found in output!");
 		}
 		
-		return termIndex;
+		node = bst.getNode();
+		return node;
 		
 	}
 	/*
