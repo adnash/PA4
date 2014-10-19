@@ -11,6 +11,7 @@ public class PA2 {
 		String fileName = args[0];		
 		WebPages wP = new WebPages();		
 		wP.readFirstFile(fileName);
+		//wP.printTerms();
 		
 	}
 	

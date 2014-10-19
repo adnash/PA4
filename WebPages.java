@@ -11,7 +11,7 @@ public class WebPages {
 	public int countMerge;
 	private boolean startFlag = false;
 	private TreeNode<Term> node;
-	
+	private boolean printFlag = true;
 	
 	
 
@@ -24,17 +24,19 @@ public class WebPages {
 		
 		
 		readFile(fileName, fileName);
-
+		
+		
+		//printTerms();
 		//termsList.addAll(p.readFile(fileName, fileName));
 		//System.out.println(termsList);		
 		
-		BSTIterator<Term> iter = new BSTIterator<Term>(bst.getNode());
-		
-		while(iter.hasNext()) {
-			
-			System.out.println(iter.next().getName());
-		}
-		
+//		BSTIterator<Term> iter = new BSTIterator<Term>(bst.getNode());
+//		
+//		while(iter.hasNext()) {
+//			
+//			System.out.println(iter.next().getName());
+//		}
+//		
 		
 
 	}
@@ -62,7 +64,32 @@ public class WebPages {
 	public Term whichPages(String word) {
 		word = word.toLowerCase();
 		Term term;
+		
+		String docs = null;
+		
+		if(printFlag) {
+			printTerms(); 
+			printFlag  = false;
+			System.out.println();
+		}
 		term = bst.get(word, true);
+		
+		if(term == null)
+			System.out.println(word+" not found");
+		else {
+			
+			for(int i=0;i<term.getDocNames().size();i++){
+				if(i==0)
+					docs = term.getDocNames().get(i).getDocName();
+				else
+					docs +=  ", "+term.getDocNames().get(i).getDocName()+": "; // ADD TFIDF HERE 
+			}
+			
+			
+			System.out.println(word+" in pages:"+docs);
+		}
+			
+		
 //		ArrayList<String> temp = new ArrayList<String>();
 //		int countName = 0;
 //		while(countName<termsList.size()){
@@ -75,7 +102,7 @@ public class WebPages {
 //			countName++;
 //		}
 		
-		System.out.println("Found Term: "+term.getName()+"in"+term.getDocNames());
+		//System.out.println("Found Term: "+term.getName()+"in"+term.getDocNames());
 		
 		
 		
@@ -113,7 +140,7 @@ public class WebPages {
 						//pruneStopWords(stopWordNum);
 						
 						
-						//printTerms();
+						
 						//System.out.print("\n");
 						
 						pruneTriger = true;
@@ -123,7 +150,7 @@ public class WebPages {
 					//words to be searched added to an ArrayList to search later 	
 					}else{
 						
-						//Issues here 
+						
 						searchedTerm = whichPages(word);		
 						
 						
@@ -179,18 +206,26 @@ public class WebPages {
 		}
 	
 	public void printTerms()  {
+		
 		System.out.println("WORDS");
-		for(int i=0;i<termsList.size();i++) {
-			System.out.println(termsList.get(i).getName());
+		BSTIterator<Term> iter = new BSTIterator<Term>(termsTree);		
+		while(iter.hasNext()) {
+			System.out.println(iter.next().getName());
 		}
 		
+		
+		//		System.out.println("WORDS");
+//		for(int i=0;i<termsList.size();i++) {
+//			System.out.println(termsList.get(i).getName());
+//		}
+//		
 		
 	}
 	public void readFile(String fileName,String docName) {
 		String word = null;
 		String wordPuncRemoved = null;
 		String htmlRemoved = null;
-		BinarySearch search = new BinarySearch();	
+		//BinarySearch search = new BinarySearch();	
 		BST bst = new BST();
 		
 		

@@ -1,7 +1,8 @@
-example1.txt
+simple3.txt
 example2.txt
+data3.txt
 *EOFs*
-2
 JON
 tiger
-panda
+dog
+hippo

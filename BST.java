@@ -141,8 +141,8 @@ public class BST {
 			}
 			//found the value here
 			if(printDepth)
-				System.out.println(word+"  At Depth "+depth);
-			return root.getItem();
+				System.out.println("  At Depth "+depth);
+			return currentNode.getItem();
 		
 	}
 	
