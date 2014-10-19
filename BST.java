@@ -170,29 +170,35 @@ public class BST {
 	
 	public void inOrder(TreeNode<Term> node) {
 		
-		if(node != null){
-			inOrder(node.getLeft());
-			System.out.println(node);
-			inOrder(node.getRight());
+//		if(node != null){
+//			inOrder(node.getLeft());
+//			System.out.println(node.getItem());
+//			inOrder(node.getRight());
+//		}
+		
+		
+		BSTIterator<Term> iter = new BSTIterator<Term>(root);
+		
+		while(iter.hasNext()) {
+			System.out.println(iter.next());
 		}
 		
 	}
-	
 	
 	public static void main(String[] args) {
 
 		BST tree = new BST();
 		
-		tree.add("Google", "a");
-		tree.add("Google", "z");
-		tree.add("Google", "c");
-		tree.add("Google", "d");
-		tree.add("Google", "d");
+		tree.add("Google", "Jeremy");
+		tree.add("Google", "Jer");
+		tree.add("Google", "Jerem");
+		tree.add("Google", "J");
+		tree.add("Google", "Je");
 		
 		tree.inOrder(tree.root);
 		
 		
-		tree.get("d",true);
+		//tree.get("d",true);
 
 		// Different ways to traverse binary trees
 
