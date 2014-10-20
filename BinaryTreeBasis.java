@@ -35,7 +35,7 @@ public abstract class BinaryTreeBasis<T> {
   }  // end makeEmpty
 
   public T getRootItem() throws TreeException {
-// Returns the item in the tree’s root.
+// Returns the item in the trees root.
     if (root == null) {
       throw new TreeException("TreeException: Empty tree");
     }

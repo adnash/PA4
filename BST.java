@@ -135,13 +135,13 @@ public class BST {
 				
 				if(currentNode == null) {
 					if(printDepth)
-						System.out.println("  At Depth "+depth);
+						System.out.println("  At depth "+depth);
 					return null;
 				}
 			}
 			//found the value here
 			if(printDepth)
-				System.out.println("  At Depth "+depth);
+				System.out.println("  At depth "+depth);
 			return currentNode.getItem();
 		
 	}

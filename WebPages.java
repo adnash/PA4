@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -23,7 +24,7 @@ public class WebPages {
 
 	public void addPage(String fileName) {
 
-
+		totalDocs++;
 		readFile(fileName, fileName);
 
 
@@ -63,7 +64,7 @@ public class WebPages {
 
 
 	public Term whichPages(String word) {
-
+		String temp = word;
 		word = word.toLowerCase();
 		Term term;
 
@@ -76,24 +77,28 @@ public class WebPages {
 		}
 		term = bst.get(word, true);
 
-		float TF = 0;
-		float wordtermDocs = term.getDocNames().size();
-		double TFIDF = 0;
+		float TF = 0;// occurrences of the term in the document
+		float wordtermDocs = 0;
+		if(term!=null)
+			wordtermDocs = term.getDocNames().size();//number of docs the term is in
+		double TFIDF = 0;// equation is TFIDF(d,t) = TF(d,t) * log (D / DF(t))
 
 		if(term == null)
-			System.out.println(word+" not found");
+			System.out.println(temp+" not found");
 		else {
 
 			for(int i=0;i<term.getDocNames().size();i++){
 				if(i==0){
 					TF = term.getDocNames().get(i).getTermFrequency();
 					TFIDF = TF * (Math.log(totalDocs/wordtermDocs));
-					docs = term.getDocNames().get(i).getDocName() + ": " + TFIDF;
+					String num = String.format("%.2f", (double)TFIDF);
+					docs = " "+term.getDocNames().get(i).getDocName() + ": " + num;
 				}
 				else{
 					TF = term.getDocNames().get(i).getTermFrequency();
 					TFIDF = TF * (Math.log(totalDocs/wordtermDocs));
-					docs +=  ", "+term.getDocNames().get(i).getDocName()+": " + TFIDF; // ADD TFIDF HERE
+					String num = String.format("%.2f", (double)TFIDF);
+					docs +=  ", "+term.getDocNames().get(i).getDocName()+": " + num; // ADD TFIDF HERE
 				}
 			}
 
@@ -134,7 +139,6 @@ public class WebPages {
 			Scanner read = new Scanner(new File(fileName));
 
 			while(read.hasNext()) {
-				totalDocs++;
 				word = read.next();
 
 				//System.out.println(word);
