@@ -167,17 +167,35 @@ public class BST {
 		return this.root;
 	}
 	
+	public int getHeight(TreeNode<Term> node) {
+		if(node == null)  
+			return 0;
+		
+		int heightLeft = getHeight(node.getLeft());
+		int heightRight = getHeight(node.getRight());
+		
+		if(heightRight < heightLeft)
+			return heightRight+1;
+		
+		else
+			return heightLeft+1;
+					
+	}
+	
 	public static void main(String[] args) {
 
 		BST tree = new BST();
 		
-		tree.add("Google", "panda");
-		tree.add("Google", "tiger");
-		tree.add("Google", "a");
-		tree.add("Google", "c");
-		tree.add("Google", "z");
+		tree.add("Google", "m");
+		//tree.add("Google", "c");
+		//tree.add("Google", "a");
+		//tree.add("Google", "z");
 		
-		tree.inOrder(tree.getNode());
+		System.out.print(tree.getHeight(tree.getNode()) );
+		
+		
+		
+		//tree.inOrder(tree.getNode());
 		
 		
 		//tree.get("zz",true);
