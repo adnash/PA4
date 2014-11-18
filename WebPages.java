@@ -14,6 +14,7 @@ public class WebPages {
 	private TreeNode<Term> node;
 	private boolean printFlag = true;
 	private float totalDocs = 0;
+	HashTable ht = new HashTable();
 
 
 
@@ -43,23 +44,8 @@ public class WebPages {
 
 	}
 
-	public void pruneStopWords(int n) {
-		ArrayList<Term> temp = new ArrayList<Term>();
-		MergeSortName msn = new MergeSortName();
-		MergeSortFreq msf = new MergeSortFreq();
-		temp = termsList; 
-		System.out.println();
-		//temp = mergeSortFreq(temp);
-		msf.mergesort(temp);
-
-		System.out.println("Copies: " + msf.count);
-		while(n > 0){
-			temp.remove(temp.size()-1);
-			n--;
-		}
-		msn.mergesort(temp);
-		termsList = temp;
-		System.out.println("Copies: " + msn.count + "\n");
+	public void pruneStopWords(String n) {
+		ht.remove(n);
 	}
 
 
@@ -75,7 +61,7 @@ public class WebPages {
 			printFlag  = false;
 			System.out.println();
 		}
-		term = bst.get(word, true);
+		term = ht.get(word, true);
 
 		float TF = 0;// occurrences of the term in the document
 		float wordtermDocs = 0;
@@ -131,6 +117,7 @@ public class WebPages {
 		boolean pruneTriger = false;
 		String word = null;	
 		boolean eofsFlag = false;
+		boolean stopsFlag = false;
 		int stopWordNum = 0;
 		Term searchedTerm;
 
@@ -138,6 +125,11 @@ public class WebPages {
 		try {
 			Scanner read = new Scanner(new File(fileName));
 
+			if(read.hasNextInt()){
+				word = read.next();
+				int size = Integer.parseInt(word);
+				ht.setTableSize(size);
+			}
 			while(read.hasNext()) {
 				word = read.next();
 
@@ -145,11 +137,12 @@ public class WebPages {
 
 				if(word.compareTo("*EOFs*")==0)
 					eofsFlag = true;
+				else if(word.compareTo("*STOPs*") == 0)
+					stopsFlag = true;
 				else {	
 					//Checks for the integer for prune stop word amount
-					if(isInteger(word) && pruneTriger == false) {							
-						stopWordNum = Integer.parseInt(word);
-
+					if(stopsFlag == false && eofsFlag == true) {							
+						pruneStopWords(word);
 						//System.out.println("WORDS");
 						//printTerms();
 
@@ -160,7 +153,6 @@ public class WebPages {
 
 						//System.out.print("\n");
 
-						pruneTriger = true;
 						//if scanner is before *EOFS* t
 					}else if(eofsFlag == false) {
 						addPage(word);
@@ -292,16 +284,16 @@ public class WebPages {
 						tempTwo = tempTwo.replaceAll("\\s+","");
 
 						if(!temp.isEmpty())
-							bst.add(docName,temp);
+							ht.add(docName,temp);
 						//termIndex = search.searchList(termIndex, temp,docName);
 						if(!tempTwo.isEmpty())
-							bst.add(docName,tempTwo);
+							ht.add(docName,tempTwo);
 						//termIndex = search.searchList(termIndex, tempTwo,docName);
 						flag = false;
 					}else {
 						wordPuncRemoved = wordPuncRemoved.replaceAll("[\\s]*","");
 						if(wordPuncRemoved.isEmpty() == false) {
-							bst.add(docName,wordPuncRemoved);
+							ht.add(docName,wordPuncRemoved);
 							//System.out.println(wordPuncRemoved);
 							//termIndex = search.searchList(termIndex, wordPuncRemoved,fileName);
 
@@ -361,9 +353,6 @@ public class WebPages {
 		} catch (FileNotFoundException e) {			
 			System.err.println("Error: found in output!");
 		}
-
-		this.termsTree = bst.getNode();
-
 
 	}
 	/*
