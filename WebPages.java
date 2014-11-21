@@ -112,10 +112,12 @@ public class WebPages {
 		double wiq = 0;
 		double half = 0.5000000000000000000;
 		double full = 1.0;
-		if(Arrays.asList(query).contains(term.getName())){
-			if(term != null)
-				wiq = (half*(full+(double)Math.log(totalDocs/(double)(term.getDocNames().size()))));
-			queryWeights += Math.pow(wiq,2);
+		for(int i = 0; i<query.length; i++){
+			if(term.getName().equals(query[i])){
+				if(term != null)
+					wiq = ((double)half*((double)full+(double)Math.log((double)totalDocs/(double)(term.getDocNames().size()))));
+				queryWeights += (double)Math.pow(wiq,2);
+			}
 		}
 
 		int docSpot = 0;
@@ -128,10 +130,15 @@ public class WebPages {
 				if(docNames[j].equals(term.getDocNames().get(docSpot).getDocName())){
 					double TF = 0;// occurrences of the term in the document
 					double TFIDF = 0;
-					TF = term.getDocNames().get(docSpot).getTermFrequency();
-					TFIDF = TF * (double)(Math.log(totalDocs/wordtermDocs));
-					docSpecific[j] += Math.pow(TFIDF,2);
-					common[j] += TFIDF * wiq;
+					TF = (double)term.getDocNames().get(docSpot).getTermFrequency();
+					TFIDF = (double)TF * (double)(Math.log((double)totalDocs/(double)wordtermDocs));
+					docSpecific[j] += (double)Math.pow(TFIDF,2);
+					for(int i = 0; i<query.length; i++){
+						if(term.getName().equals(query[i])){
+							if(term != null)
+								common[j] += (double)TFIDF * (double)wiq;
+						}
+					}
 					docSpot++;
 
 				}
@@ -166,15 +173,22 @@ public class WebPages {
 			}
 		}
 		SimObject sim = new SimObject(docFinal, (float)total);
-		DecimalFormat format = new DecimalFormat("0.00"); 
-		Arrays.sort(words);
-		System.out.print("[");
-		for(int i = 0; i<words.length;i++){
-			System.out.print(words[i]+ " ");
+		if(docFinal == null){
+			System.out.print("[");
+			for(int i = 0; i<words.length;i++){
+				System.out.print(words[i]+ " ");
+			}
+			System.out.println("] not found");
+		}else{
+			DecimalFormat format = new DecimalFormat("0.00"); 
+			Arrays.sort(words);
+			System.out.print("[");
+			for(int i = 0; i<words.length;i++){
+				System.out.print(words[i]+ " ");
+			}
+			System.out.println("] in " + docFinal+": " +format.format(total));
 		}
-		System.out.println("] in " + docFinal+": " +format.format(total));
 		return sim;
-
 	}
 
 	public void readFirstFile(String fileName){

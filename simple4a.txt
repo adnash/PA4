@@ -1,18 +1,1 @@
-cat dog cat bird cat the bird dog aardwolf	South African carnivorous fox-like quadruped
-aasvogel South African vulture
-aba	garment of camel or goat hair; camel or goat-hair fabric
-abacinate to blind by putting red-hot copper basin near the eyes
-abactor	cattle thief
-abaculus	small tile for mosaic
-abaft	toward or at the stern of a ship; further aft
-abampere	unit equivalent to amperes
-abapical	at the lowest point
-abarticular	not connected with the joint
-abasement	action of humbling or degrading
-abasia	inability to walk due to lack of muscular coordination
-abask	in genial warmth
-abatis	rampart of felled trees and branches
-abatjour	skylight or device to direct light into a room
-abattoir	public slaughterhouse
-abature	trail through wood beaten down by a <href>stag<html>
-abb air1bags
+cat dog cat bird cat the bird dog
