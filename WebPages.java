@@ -59,8 +59,8 @@ public class WebPages {
 		}
 		term = ht.get(word, true);
 
-		float TF = 0;// occurrences of the term in the document
-		float wordtermDocs = 0;
+		double TF = 0;// occurrences of the term in the document
+		double wordtermDocs = 0;
 		if(term!=null)
 			wordtermDocs = term.getDocNames().size();//number of docs the term is in
 		double TFIDF = 0;// equation is TFIDF(d,t) = TF(d,t) * log (D / DF(t))
@@ -114,13 +114,13 @@ public class WebPages {
 		double full = 1.0;
 		if(Arrays.asList(query).contains(term.getName())){
 			if(term != null)
-				wiq = (half*(full+(float)Math.log(totalDocs/(float)(term.getDocNames().size()))));
+				wiq = (half*(full+(double)Math.log(totalDocs/(double)(term.getDocNames().size()))));
 			queryWeights += Math.pow(wiq,2);
 		}
 
 		int docSpot = 0;
 		if(term != null){
-			float wordtermDocs = term.getDocNames().size();//number of docs the term is in
+			double wordtermDocs = term.getDocNames().size();//number of docs the term is in
 			for(int j=0; j<totalDocs; j++){
 				if(docSpot>=term.getDocNames().size()){
 					break;
@@ -129,11 +129,9 @@ public class WebPages {
 					double TF = 0;// occurrences of the term in the document
 					double TFIDF = 0;
 					TF = term.getDocNames().get(docSpot).getTermFrequency();
-					TFIDF = TF * (float)(Math.log(totalDocs/wordtermDocs));
+					TFIDF = TF * (double)(Math.log(totalDocs/wordtermDocs));
 					docSpecific[j] += Math.pow(TFIDF,2);
-					if(Arrays.asList(query).contains(term.getName())){
-						common[j] += TFIDF * wiq;
-					}
+					common[j] += TFIDF * wiq;
 					docSpot++;
 
 				}
@@ -146,14 +144,14 @@ public class WebPages {
 
 	public SimObject bestPages(String word){
 		word = word.toLowerCase();
-		String words[] = word.split(" ", 10);
+		String words[] = word.split(" ");
 		queryWeights = 0;
 		docs = new String[(int)totalDocs];
 		common = new double[(int)totalDocs];
 		docSpecific = new double[(int)totalDocs];
 
-		for(int i = 0; i<ht.tableSize-1;i++){
-			if(ht.table[i] != null && !ht.table[i].getName().equals("RESERVED") )
+		for(int i = 0; i<ht.tableSize;i++){
+			if(ht.table[i] != null)
 				SIM(ht.table[i], words);
 		}
 
@@ -161,14 +159,13 @@ public class WebPages {
 		double temp = 0;
 		String docFinal = null;
 		for(int i = 0; i<totalDocs; i++){
-			temp = common[i]/(Math.sqrt(docSpecific[i])*Math.sqrt(queryWeights));
+			temp = (double)common[i]/((double)Math.sqrt(docSpecific[i])*(double)Math.sqrt(queryWeights));
 			if(temp>=total){
 				total = temp;
 				docFinal = docNames[i];
 			}
 		}
 		SimObject sim = new SimObject(docFinal, (float)total);
-		String num = String.format("%.2f", total);
 		DecimalFormat format = new DecimalFormat("0.00"); 
 		Arrays.sort(words);
 		System.out.print("[");
