@@ -83,16 +83,16 @@ public class P1 {
 						tempTwo = tempTwo.replaceAll("\\s+","");
 						
 						if(!temp.isEmpty())
-							ht.add(docName,temp);
+							//ht.add(docName,temp);
 							//termIndex = search.searchList(termIndex, temp,docName);
 						if(!tempTwo.isEmpty())
-							ht.add(docName,tempTwo);
+							//ht.add(docName,tempTwo);
 							//termIndex = search.searchList(termIndex, tempTwo,docName);
 						flag = false;
 					}else {
 						wordPuncRemoved = wordPuncRemoved.replaceAll("[\\s]*","");
 						if(wordPuncRemoved.isEmpty() == false) {
-							ht.add(docName,wordPuncRemoved);
+							//ht.add(docName,wordPuncRemoved);
 							//System.out.println(wordPuncRemoved);
 							//termIndex = search.searchList(termIndex, wordPuncRemoved,fileName);
 						

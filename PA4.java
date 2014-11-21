@@ -7,7 +7,7 @@ public class PA4 {
 		}
 
 		String fileName = args[0];		
-		WebPages wP = new WebPages();		
+		WebPages wP = new WebPages();
 		wP.readFirstFile(fileName);
 		//wP.printTerms();
 

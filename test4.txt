@@ -1,0 +1,11 @@
+10
+simple4a.txt
+simple4b.txt
+simple4c.txt
+*EOFs*
+the
+bird
+dog
+*STOPs*
+JON dog
+cat coati

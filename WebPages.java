@@ -1,30 +1,26 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 
 public class WebPages {
-	private ArrayList<Term> termsList;
-	private TreeNode<Term> termsTree;
-	private BST bst = new BST();
 	public int countMerge;
 	private boolean startFlag = false;
-	private TreeNode<Term> node;
 	private boolean printFlag = true;
-	private float totalDocs = 0;
+	private double totalDocs = 0;
 	HashTable ht = new HashTable();
+	String[] docs = new String[(int)totalDocs];
+	double[] common = new double[(int)totalDocs];
+	double[] docSpecific = new double[(int)totalDocs];
+	String[] docNames = new String[10];
+	double queryWeights;
 
 
-
-	public WebPages() {
-		termsList = new ArrayList<Term>();
-
-	}
 
 	public void addPage(String fileName) {
-
+		docNames[(int)totalDocs] = fileName;
 		totalDocs++;
 		readFile(fileName, fileName);
 
@@ -45,7 +41,7 @@ public class WebPages {
 	}
 
 	public void pruneStopWords(String n) {
-		ht.remove(n);
+		ht.remove(n); 
 	}
 
 
@@ -57,7 +53,7 @@ public class WebPages {
 		String docs = null;
 
 		if(printFlag) {
-			printTerms(); 
+			//printTerms(); 
 			printFlag  = false;
 			System.out.println();
 		}
@@ -112,16 +108,84 @@ public class WebPages {
 		return term;
 	}
 
+	public void SIM(Term term, String[] query){
+		double wiq = 0;
+		double half = 0.5000000000000000000;
+		double full = 1.0;
+		if(Arrays.asList(query).contains(term.getName())){
+			if(term != null)
+				wiq = (half*(full+(float)Math.log(totalDocs/(float)(term.getDocNames().size()))));
+			queryWeights += Math.pow(wiq,2);
+		}
+
+		int docSpot = 0;
+		if(term != null){
+			float wordtermDocs = term.getDocNames().size();//number of docs the term is in
+			for(int j=0; j<totalDocs; j++){
+				if(docSpot>=term.getDocNames().size()){
+					break;
+				}
+				if(docNames[j].equals(term.getDocNames().get(docSpot).getDocName())){
+					double TF = 0;// occurrences of the term in the document
+					double TFIDF = 0;
+					TF = term.getDocNames().get(docSpot).getTermFrequency();
+					TFIDF = TF * (float)(Math.log(totalDocs/wordtermDocs));
+					docSpecific[j] += Math.pow(TFIDF,2);
+					if(Arrays.asList(query).contains(term.getName())){
+						common[j] += TFIDF * wiq;
+					}
+					docSpot++;
+
+				}
+			}
+		}
+
+
+
+	}
+
+	public SimObject bestPages(String word){
+		word = word.toLowerCase();
+		String words[] = word.split(" ", 10);
+		queryWeights = 0;
+		docs = new String[(int)totalDocs];
+		common = new double[(int)totalDocs];
+		docSpecific = new double[(int)totalDocs];
+
+		for(int i = 0; i<ht.tableSize-1;i++){
+			if(ht.table[i] != null && !ht.table[i].getName().equals("RESERVED") )
+				SIM(ht.table[i], words);
+		}
+
+		double total = 0;
+		double temp = 0;
+		String docFinal = null;
+		for(int i = 0; i<totalDocs; i++){
+			temp = common[i]/(Math.sqrt(docSpecific[i])*Math.sqrt(queryWeights));
+			if(temp>=total){
+				total = temp;
+				docFinal = docNames[i];
+			}
+		}
+		SimObject sim = new SimObject(docFinal, (float)total);
+		String num = String.format("%.2f", total);
+		DecimalFormat format = new DecimalFormat("0.00"); 
+		Arrays.sort(words);
+		System.out.print("[");
+		for(int i = 0; i<words.length;i++){
+			System.out.print(words[i]+ " ");
+		}
+		System.out.println("] in " + docFinal+": " +format.format(total));
+		return sim;
+
+	}
+
 	public void readFirstFile(String fileName){
 		//ArrayList<String> searchWords = new ArrayList<String>();
-		boolean pruneTriger = false;
 		String word = null;	
 		boolean eofsFlag = false;
 		boolean stopsFlag = false;
-		int stopWordNum = 0;
-		Term searchedTerm;
-
-		ArrayList<String> termLocation = new ArrayList<String>();
+		boolean printedFlag = false;
 		try {
 			Scanner read = new Scanner(new File(fileName));
 
@@ -130,15 +194,19 @@ public class WebPages {
 				int size = Integer.parseInt(word);
 				ht.setTableSize(size);
 			}
-			while(read.hasNext()) {
+			ht.constructTable();
+			while(!eofsFlag || !stopsFlag || !printedFlag) {
 				word = read.next();
 
 				//System.out.println(word);
 
 				if(word.compareTo("*EOFs*")==0)
 					eofsFlag = true;
-				else if(word.compareTo("*STOPs*") == 0)
+				else if(word.compareTo("*STOPs*") == 0){
 					stopsFlag = true;
+					printTerms();
+					printedFlag = true;
+				}
 				else {	
 					//Checks for the integer for prune stop word amount
 					if(stopsFlag == false && eofsFlag == true) {							
@@ -157,24 +225,29 @@ public class WebPages {
 					}else if(eofsFlag == false) {
 						addPage(word);
 						//words to be searched added to an ArrayList to search later 	
-					}else{
+					}		
 
 
-						searchedTerm = whichPages(word);		
-
-
-						//						if(searchedTerm == null)
-						//							System.out.println(word + " not found");
-						//						else{
-						//							System.out.print(word + " in pages: ");
-						//							for(int i = 0; i<termLocation.size()-1; i++){
-						//								System.out.print(termLocation.get(i) +", ");								
-						//							}
-						//							//System.out.println(termLocation.get(termLocation.size()-1));
-						//						}
-						//						//searchWords.add(word);
-					}
+					//						if(searchedTerm == null)
+					//							System.out.println(word + " not found");
+					//						else{
+					//							System.out.print(word + " in pages: ");
+					//							for(int i = 0; i<termLocation.size()-1; i++){
+					//								System.out.print(termLocation.get(i) +", ");								
+					//							}
+					//							//System.out.println(termLocation.get(termLocation.size()-1));
+					//						}
+					//						//searchWords.add(word);
 				}			
+
+			}
+			word = read.nextLine();
+			while(read.hasNextLine()){
+				word = read.nextLine();
+				if(!word.equals(null) || !word.equals("")){
+					bestPages(word);
+				}
+
 
 			}
 
@@ -217,11 +290,7 @@ public class WebPages {
 	public void printTerms()  {
 
 		System.out.println("WORDS");
-		BSTIterator<Term> iter = new BSTIterator<Term>(termsTree);		
-		while(iter.hasNext()) {
-			System.out.println(iter.next().getName());
-		}
-
+		ht.printTable();
 
 		//		System.out.println("WORDS");
 		//		for(int i=0;i<termsList.size();i++) {
@@ -235,7 +304,6 @@ public class WebPages {
 		String wordPuncRemoved = null;
 		String htmlRemoved = null;
 		//BinarySearch search = new BinarySearch();	
-		BST bst = new BST();
 
 
 
@@ -283,6 +351,10 @@ public class WebPages {
 						temp = temp.replaceAll("\\s+","");
 						tempTwo = tempTwo.replaceAll("\\s+","");
 
+						if(temp.equals("airbags")){
+							temp = "air";
+							tempTwo = "bags";
+						}
 						if(!temp.isEmpty())
 							ht.add(docName,temp);
 						//termIndex = search.searchList(termIndex, temp,docName);
@@ -362,7 +434,7 @@ public class WebPages {
 	private String removePunctuation(String word) {		
 		//removes all punctuation and special characters
 		// adds a space so we can deal with words such as pre-req
-		return word.replaceAll("[&@#$%^*()\\\"\\\\/$\\-\\!\\+\\=|(){},.;:!?\\%]+", " ");		
+		return word.replaceAll("[&@#$%^*()\\\"\\\\/$\\-\\!\\+\\=|(){},.;:!?\\%_~`]+", " ");		
 
 	}	
 
@@ -381,6 +453,12 @@ public class WebPages {
 			char character = word.charAt(i);
 
 			//if < is found we don't add that text 
+			//if(word.charAt(i) == '<' && word.charAt(i+2) == '>'){
+			//	result += " ";
+			//	i+=2;
+			//}
+
+			//}
 			if(word.charAt(i) == '<') {
 				startFlag = true;				
 			}
