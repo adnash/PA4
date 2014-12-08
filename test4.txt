@@ -2,6 +2,7 @@
 simple4a.txt
 simple4b.txt
 simple4c.txt
+ForSale.html
 *EOFs*
 the
 bird

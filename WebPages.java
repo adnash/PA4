@@ -325,10 +325,7 @@ public class WebPages {
 
 
 			while(read.hasNext() ) {
-				String temp = null;
-				String tempTwo = null;
 				word = read.next();
-				boolean flag = false;
 
 				//System.out.println(word);
 
@@ -339,43 +336,12 @@ public class WebPages {
 					htmlRemoved = removeHTML(word).replaceAll("\\s+","");
 					wordPuncRemoved = removePunctuation(htmlRemoved).toLowerCase();
 
-
-					for(int i=0;i<wordPuncRemoved.length();i++) { 
-
-
-						if(wordPuncRemoved.charAt(i) == ' ' && i >= 1) {
-							flag = true;								
-							temp = wordPuncRemoved.substring(0, i);
-							tempTwo = wordPuncRemoved.substring(i+1,wordPuncRemoved.length() );
-
-							//System.out.println(temp+"...."+tempTwo);
-
-
-
-						}
-
+					String words[] = wordPuncRemoved.split(" ");
+					for(int i=0;i<words.length;i++) { 
+						ht.add(docName,words[i]);
 					}
-
-
-					if(flag) {
-
-
-
-						temp = temp.replaceAll("\\s+","");
-						tempTwo = tempTwo.replaceAll("\\s+","");
-
-						if(temp.equals("airbags")){
-							temp = "air";
-							tempTwo = "bags";
-						}
-						if(!temp.isEmpty())
-							ht.add(docName,temp);
-						//termIndex = search.searchList(termIndex, temp,docName);
-						if(!tempTwo.isEmpty())
-							ht.add(docName,tempTwo);
-						//termIndex = search.searchList(termIndex, tempTwo,docName);
-						flag = false;
-					}else {
+					
+					/*}else {
 						wordPuncRemoved = wordPuncRemoved.replaceAll("[\\s]*","");
 						if(wordPuncRemoved.isEmpty() == false) {
 							ht.add(docName,wordPuncRemoved);
@@ -384,7 +350,7 @@ public class WebPages {
 
 						}
 
-					}
+					}*/
 
 
 
