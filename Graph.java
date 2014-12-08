@@ -77,12 +77,13 @@ public class Graph {
 	//Postcondition:  Source, dest, and edge from source to dest is present.
 	//Returns true if the edge was added.
 	public boolean add(String source, String dest){
-		if(!this.contains(source)){
+		if(!this.contains(source)){		//If the source page is absent, it's added.
 			this.add(source);
 		}
-		if(this.contains(dest)){		//If the vertex is present, we still might need to add the edge
+		if(this.contains(dest)){		//If the source and destination are both present, adds the link if necessary
 			return addEdge(source, dest);
-		}else{
+		}									//Otherwise, adds the link and the destination.
+		else{
 			//If the vertex belongs somewhere in the middle of the list
 			for(int i = 0; i<vertices.size(); i++){
 				if(vertices.get(i).compareTo(dest) > 0){
