@@ -16,10 +16,12 @@ public class WebPages {
 	double[] docSpecific = new double[(int)totalDocs];
 	String[] docNames = new String[10];
 	double queryWeights;
-
+	Graph g = new Graph();
 
 
 	public void addPage(String fileName) {
+		g.add(fileName);
+		addLinks(fileName);
 		docNames[(int)totalDocs] = fileName;
 		totalDocs++;
 		readFile(fileName, fileName);
@@ -498,8 +500,42 @@ public class WebPages {
 		temp = result;
 		return temp;		 
 
-	}		
+	}
 
+	//Adds every link in the file with the path given by fileName to the graph.
+	//Links must have the following form:
+	//     <a href="http://FILENAME">
+	//Where:
+	//	FILENAME is the name of the file being linked to
+	//	Any (nonzero) amount of whitespace can come between "<a" and "href= ... >"
+	public void addLinks(String fileName){
+		try {
+		File file = new File(fileName);
+		Scanner fReader = new Scanner(file);
+
+		String word = null;
+
+		while(fReader.hasNext()){
+			word = fReader.next();
+			if(word.contains("<a") && fReader.hasNext()){
+				word = fReader.next();
+				if(word.startsWith("href=\"http://")){
+					word = word.substring(13);						//The first character of FILENAME has index 13.
+					if(word.contains("\"")){
+						word = word.substring(0, word.indexOf("\">"));
+						g.add(fileName, word);
+					}
+				}
+			}
+		}
+		
+		fReader.close();
+		
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 
 
