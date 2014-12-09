@@ -17,7 +17,7 @@ public class WebPages {
 	String[] docNames = new String[10];
 	double queryWeights;
 	Graph g = new Graph();
-
+	String fileGraphName;
 
 	public void addPage(String fileName) {
 		g.add(fileName);
@@ -201,7 +201,7 @@ public class WebPages {
 		boolean printedFlag = false;
 		try {
 			Scanner read = new Scanner(new File(fileName));
-
+			fileGraphName = read.next(); 
 			if(read.hasNextInt()){
 				word = read.next();
 				int size = Integer.parseInt(word);
