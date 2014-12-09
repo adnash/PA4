@@ -1,0 +1,6 @@
+digraph program 5 {
+"simple5.txt" -> "simple5b.txt";
+"simple5a.txt" -> "simple5b.txt";
+"simple5a.txt" -> "simple5.txt";
+"simple5b.txt" -> "complex.txt";
+}
