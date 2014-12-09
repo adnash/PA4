@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -169,6 +170,7 @@ public class WebPages {
 		String docFinal = null;
 		for(int i = 0; i<totalDocs; i++){
 			temp = (double)common[i]/((double)Math.sqrt(docSpecific[i])*(double)Math.sqrt(queryWeights));
+			temp = temp * g.inDegree(docNames[i]);
 			if(temp>=total){
 				total = temp;
 				docFinal = docNames[i];
@@ -217,7 +219,7 @@ public class WebPages {
 					eofsFlag = true;
 				else if(word.compareTo("*STOPs*") == 0){
 					stopsFlag = true;
-					printTerms();
+					//printTerms();
 					printedFlag = true;
 				}
 				else {	
@@ -263,7 +265,12 @@ public class WebPages {
 
 
 			}
-
+			try {
+				g.writeDotFile(fileGraphName);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			read.close();	
 
 
@@ -340,7 +347,7 @@ public class WebPages {
 					for(int i=0;i<words.length;i++) { 
 						ht.add(docName,words[i]);
 					}
-					
+
 					/*}else {
 						wordPuncRemoved = wordPuncRemoved.replaceAll("[\\s]*","");
 						if(wordPuncRemoved.isEmpty() == false) {
@@ -476,27 +483,29 @@ public class WebPages {
 	//	Any (nonzero) amount of whitespace can come between "<a" and "href= ... >"
 	public void addLinks(String fileName){
 		try {
-		File file = new File(fileName);
-		Scanner fReader = new Scanner(file);
+			File file = new File(fileName);
+			Scanner fReader = new Scanner(file);
 
-		String word = null;
+			String word = null;
 
-		while(fReader.hasNext()){
-			word = fReader.next();
-			if(word.contains("<a") && fReader.hasNext()){
+			while(fReader.hasNext()){
 				word = fReader.next();
-				if(word.startsWith("href=\"http://")){
-					word = word.substring(13);						//The first character of FILENAME has index 13.
-					if(word.contains("\"")){
-						word = word.substring(0, word.indexOf("\">"));
-						g.add(fileName, word);
+				if(word.contains("<a") && fReader.hasNext()){
+					word = fReader.next();
+					if(word.startsWith("href=\"http://")){
+						word = word.substring(13);						//The first character of FILENAME has index 13.
+						if(word.contains("\"")){
+							word = word.substring(0, word.indexOf("\">"));
+							if(!word.equals("")){
+								g.add(fileName, word);
+							}
+						}
 					}
 				}
 			}
-		}
-		
-		fReader.close();
-		
+
+			fReader.close();
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

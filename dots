@@ -1,7 +1,8 @@
-digraph program 5
-"a" -> "b"
-"a" -> "c"
-"c" -> "b"
-"abracadabra" -> "a"
-"abracadabra" -> "b"
-"abracadabra" -> "c"
+digraph program 5 {
+"a" -> "b";
+"a" -> "c";
+"c" -> "b";
+"abracadabra" -> "a";
+"abracadabra" -> "b";
+"abracadabra" -> "c";
+}

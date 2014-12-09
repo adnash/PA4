@@ -8,15 +8,15 @@ public class Graph {
 	private LinkedList<String> vertices = new LinkedList<>();
 	private LinkedList<Edge> edges = new LinkedList<>();
 	private int[][] adjMatrix;
-	
+
 	public LinkedList<String> getVertices(){
 		return this.vertices;
 	}
-	
+
 	public LinkedList<Edge> getEdges(){
 		return this.edges;
 	}
-	
+
 	//Adds a vertex in alphabetical order.
 	//If the vertex is already present, does not add and returns false.
 	//If the vertex is not present, adds it and returns true.
@@ -46,15 +46,15 @@ public class Graph {
 		}
 		return null;
 	}*/
-	
+
 	public int getIndex(String name){
 		return vertices.indexOf(name);
 	}
-	
-/*	public int getIndex(Vertex vertex){
+
+	/*	public int getIndex(Vertex vertex){
 		return vertices.indexOf(vertex);
 	}*/
-	
+
 	//Adds an edge, if it doesn't already exist
 	public boolean addEdge(String source, String dest){
 		for(int i = 0; i<edges.size(); i++){
@@ -67,12 +67,12 @@ public class Graph {
 		edges.add(new Edge(source, dest));
 		return true;
 	}
-	
-//	public boolean addEdge(Vertex source, Vertex dest){
-//		return addEdge(source.getName(), dest.getName());
-//	}
-	
-	
+
+	//	public boolean addEdge(Vertex source, Vertex dest){
+	//		return addEdge(source.getName(), dest.getName());
+	//	}
+
+
 	//Precondition:  Source, dest, or edge between them is not present.
 	//Postcondition:  Source, dest, and edge from source to dest is present.
 	//Returns true if the edge was added.
@@ -98,20 +98,20 @@ public class Graph {
 			return true;
 		}
 	}
-	
+
 	public boolean contains(String name){
 		return vertices.contains(name);
 	}
-	
-//	public boolean contains(Vertex vertex){
-//		for(int i = 0; i<vertices.size(); i++){
-//			if(vertices.get(i).equals(vertex)){
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
-	
+
+	//	public boolean contains(Vertex vertex){
+	//		for(int i = 0; i<vertices.size(); i++){
+	//			if(vertices.get(i).equals(vertex)){
+	//				return true;
+	//			}
+	//		}
+	//		return false;
+	//	}
+
 	public int inDegree(String filename){
 		int inDegree = 0;
 		for(int i = 0; i<edges.size(); i++){
@@ -120,14 +120,14 @@ public class Graph {
 		}
 		return inDegree;
 	}
-	
+
 	public void generateAdjMat(){
 		this.adjMatrix = new int[vertices.size()][vertices.size()];
 		for(int i = 0; i<edges.size(); i++){
 			adjMatrix[getIndex(edges.get(i).getSource())][getIndex(edges.get(i).getDest())] = 1;
 		}
 	}
-	
+
 	//Prints the adjacency matrix
 	public String toString(){
 		generateAdjMat();
@@ -143,22 +143,24 @@ public class Graph {
 		}
 		return output;
 	}
-	
+
 	public void writeDotFile(String outputFile) throws IOException{
 		File file = new File(outputFile);
 		FileWriter f = new FileWriter(file);
-		
-		f.write("digraph program 5\n");
+
+		f.write("digraph program 5 {\n");
 		for(int i = 0; i < edges.size(); i++){
-			f.write(edges.get(i).toString());
+			if(edges.get(i).toString() != null)
+				f.write(edges.get(i).toString());
 			if(i!=edges.size()-1){
 				f.write("\n");
 			}
 		}
+		f.write("\n}");
 		f.close();
-		
+
 	}
-	
+
 	public static void main(String[] args){
 		Graph g = new Graph();
 		g.add("a");
@@ -171,17 +173,17 @@ public class Graph {
 		g.add("abracadabra", "c");
 		System.out.println(g.vertices);
 		g.generateAdjMat();
-		
+
 		try {
 			g.writeDotFile("dots");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-//		System.out.println(g);
-		
+
+		//		System.out.println(g);
+
 	}
 
-	
+
 }
