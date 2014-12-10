@@ -1,0 +1,12 @@
+digraph program 5 {
+"mySimple.txt" -> "mySimpleb.txt";
+"mySimple.txt" -> "mySimple.txt";
+"mySimple.txt" -> "mySimplea.txt";
+"mySimplea.txt" -> "mySimpleb.txt";
+"mySimplea.txt" -> "mySimple.txt";
+"mySimpleb.txt" -> "mySimplea.txt";
+"mySimpleb.txt" -> "mySimpleb.txt";
+"mySimplec.txt" -> "mySimplea.txt";
+"mySimplec.txt" -> "mySimpleb.txt";
+"mySimplec.txt" -> "mySimple.txt";
+}

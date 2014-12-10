@@ -1,0 +1,3 @@
+[pangolin ] in mySimple.txt: 1.01
+[cat dog ] in mySimple.txt: 0.72
+[albatross ] in mySimple.txt: 1.01

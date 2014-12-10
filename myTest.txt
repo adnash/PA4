@@ -1,0 +1,11 @@
+myTest-grapha
+37
+mySimple.txt
+mySimplea.txt
+mySimpleb.txt
+mySimplec.txt
+*EOFs*
+*STOPs*
+pangolin
+cat dog
+albatross

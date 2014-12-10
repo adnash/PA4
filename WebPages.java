@@ -184,6 +184,7 @@ public class WebPages {
 			}
 			System.out.println("] not found");
 		}else{
+			total = Math.floor(total * 100) / 100;
 			DecimalFormat format = new DecimalFormat("0.00"); 
 			Arrays.sort(words);
 			System.out.print("[");
